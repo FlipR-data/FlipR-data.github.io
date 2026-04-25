@@ -1,0 +1,40 @@
+---
+title: "World Football R"
+subtitle: "Analysis of European football statistics with R"
+categories: [R, Sport, ggplot2]
+date: 2026-04-25
+---
+
+## Overview
+
+Analysis of European football leagues using the `worldfootballR` package. Data covers top 5 leagues — Premier League, Ligue 1, Bundesliga, Serie A, La Liga.
+
+## Load data
+
+​\`\`\`{r} #\| message: false #\| warning: false
+
+library(tidyverse) library(worldfootballR)
+
+# Example : top scorers Ligue 1 2024
+
+ligue1 \<- fb_league_stats( country = "FRA", gender = "M", season_end_year = 2024, tier = "1st", stat_type = "shooting" )
+
+```         
+
+## Visualisation
+
+​```{r}
+#| fig-width: 10
+#| fig-height: 6
+
+ligue1 |>
+  slice_max(Gls, n = 15) |>
+  ggplot(aes(x = reorder(Player, Gls), y = Gls)) +
+  geom_col(fill = "#0F6E56") +
+  coord_flip() +
+  labs(
+    title = "Top 15 scorers — Ligue 1 2024",
+    x = NULL, y = "Goals"
+  ) +
+  theme_minimal()
+```

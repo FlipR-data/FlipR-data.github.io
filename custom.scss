@@ -31,3 +31,26 @@ code {
   transition: border-color 0.2s;
   &:hover { border-color: $primary; }
 }
+
+
+
+.hero {
+  text-align: center;
+  padding: 60px 32px 40px;
+  border-bottom: 0.5px solid #D3D1C7;
+}
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  padding: 40px 32px;
+}
+
+.project-card {
+  border: 0.5px solid #D3D1C7;
+  border-radius: 12px;
+  padding: 24px;
+  transition: border-color 0.2s;
+  &:hover { border-color: $primary; }
+}

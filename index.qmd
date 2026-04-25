@@ -1,27 +1,37 @@
 ---
-title: "FlipR-data"
-subtitle: "Statistical Programmer · R · Shiny"
+title: ""
 page-layout: full
 ---
 
-## About me
-
-Statistical programmer in the pharmaceutical industry (CDISC, ADaM, TLFs).
-I use R daily for data analysis, reporting, and Shiny applications.
-I also apply R to other domains — sports analytics, finance, and more.
-
-## Projects
-
-::: {.card}
-### Adverse Event Explorer
-**Pharma · Shiny**  
-Interactive dashboard for CDISC ADaM safety data exploration.  
-[View project](projects/adverse-event-explorer.qmd)
+::: {.hero}
+# FlipR-data
+### Statistical Programmer · R · Shiny
 :::
 
-::: {.card}
-### World Football R
-**Sport · R**  
-Analysis and visualisation of football statistics using worldfootballR.  
-[View on GitHub](https://github.com/FlipR-data/worldFootballR)
+::: {.project-grid}
+
+::: {.project-card}
+### 🏥 Pharma & Clinical
+**Adverse Event Explorer**  
+Interactive Shiny dashboard for CDISC ADaM safety data exploration.  
+`Shiny` `CDISC` `ADaM`  
+[View project →](projects/pharma/index.qmd)
+:::
+
+::: {.project-card}
+### ⚽ Sport Analytics
+**World Football R**  
+Analysis and visualisation of football statistics across Europe's top leagues.  
+`ggplot2` `worldfootballR` `tidyverse`  
+[View project →](projects/football/index.qmd)
+:::
+
+::: {.project-card}
+### 📈 Finance
+**Portfolio Risk Dashboard**  
+Interactive dashboard for portfolio returns and risk metrics.  
+`Shiny` `quantmod` `tidyquant`  
+[View project →](projects/finance/index.qmd)
+:::
+
 :::
