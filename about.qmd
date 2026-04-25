@@ -2,4 +2,16 @@
 title: "About"
 ---
 
-About this site
+## Who am I ?
+
+Statistical programmer in the pharmaceutical industry. I work with R daily — CDISC standards, ADaM datasets, TLFs.
+
+Outside of pharma, I apply R to sports analytics and finance.
+
+## Skills
+
+-   R / tidyverse / ggplot2
+-   R Shiny
+-   CDISC / ADaM / TLFs
+-   Git / GitHub
+-   Quarto

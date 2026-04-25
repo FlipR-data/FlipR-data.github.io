@@ -25,6 +25,20 @@
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "About this site"
+    "text": "Statistical programmer in the pharmaceutical industry. I work with R daily — CDISC standards, ADaM datasets, TLFs.\nOutside of pharma, I apply R to sports analytics and finance."
+  },
+  {
+    "objectID": "about.html#who-am-i",
+    "href": "about.html#who-am-i",
+    "title": "About",
+    "section": "",
+    "text": "Statistical programmer in the pharmaceutical industry. I work with R daily — CDISC standards, ADaM datasets, TLFs.\nOutside of pharma, I apply R to sports analytics and finance."
+  },
+  {
+    "objectID": "about.html#skills",
+    "href": "about.html#skills",
+    "title": "About",
+    "section": "Skills",
+    "text": "Skills\n\nR / tidyverse / ggplot2\nR Shiny\nCDISC / ADaM / TLFs\nGit / GitHub\nQuarto"
   }
 ]
