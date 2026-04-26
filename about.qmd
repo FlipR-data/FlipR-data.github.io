@@ -24,7 +24,7 @@ Currently bridging legacy SAS environments with modern Open Source — **R/Pharm
 ## Experience
 
 | Period      | Company                   | Role                                 |
-|------------------------|------------------------|------------------------|
+|-------------|---------------------------|--------------------------------------|
 | 2025 – 2026 | **Debiopharm** · Lausanne | Senior Statistical Programmer (Lead) |
 | 2018 – 2024 | **Roche** · Basel         | Global Study Lead                    |
 | 2017        | **Cytel** · Geneva        | Senior Statistical Programmer (Lead) |

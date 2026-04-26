@@ -25,7 +25,7 @@ Bridging clinical data science and modern open source — from FDA submissions t
 **Adverse Event Explorer**\
 Interactive Shiny dashboard for CDISC ADaM safety data exploration.\
 `Shiny` `CDISC` `ADaM` `Teal`\
-[View project →](projects/pharma/index.qmd)
+[View project →](projects/pharma/)
 :::
 
 ::: project-card
@@ -34,7 +34,7 @@ Interactive Shiny dashboard for CDISC ADaM safety data exploration.\
 **World Football R**\
 Scouting reports, shot maps and transfer values for top players.\
 `worldfootballR` `ggplot2` `plotly` `ggsoccer`\
-[View project →](projects/football/index.qmd)
+[View project →](projects/football/index)
 :::
 
 ::: project-card
@@ -43,7 +43,7 @@ Scouting reports, shot maps and transfer values for top players.\
 **Portfolio Risk Dashboard**\
 Interactive dashboard for portfolio returns and risk metrics.\
 `Shiny` `quantmod` `tidyquant`\
-[View project →](projects/finance/index.qmd)
+[View project →](projects/finance/)
 :::
 ::::::
 
