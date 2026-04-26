@@ -1,0 +1,40 @@
+---
+title: "Portfolio Dashboard"
+subtitle: "Personal investment portfolio tracker built with R & Quarto"
+categories: [R, Finance, Quarto, tidyquant]
+date: 2026-04-25
+---
+
+## Overview
+
+An interactive portfolio dashboard built entirely in R and Quarto, pulling real-time stock data via `tidyquant` and Yahoo Finance.
+
+The dashboard tracks 9 positions across US equities, ETFs, and commodities — with key metrics updated automatically at each render.
+
+## Key metrics
+
+-   **Portfolio value** and number of positions
+-   **Sharpe ratio** — risk-adjusted performance
+-   **Performance** over 1 month, 6 months, 1 year, and 5 years
+-   **Per-stock details** — PE ratio, dividend yield, current price
+
+## Live dashboard
+
+```{=html}
+<iframe src="https://flipr-data.github.io/portfolio-dashboard/dashboard.html"
+        width="100%" 
+        height="800px" 
+        style="border: 0.5px solid #D3D1C7; border-radius: 12px;">
+</iframe>
+```
+
+## Tech stack
+
+-   `tidyquant` — stock data from Yahoo Finance
+-   `quantmod` — financial data manipulation
+-   `ggplot2` — price evolution charts
+-   `Quarto` dashboard layout
+
+## Source code
+
+Full code available on [GitHub](https://github.com/FlipR-data/portfolio-dashboard).

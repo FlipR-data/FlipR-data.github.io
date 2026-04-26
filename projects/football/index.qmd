@@ -240,6 +240,16 @@ ggplotly(p, tooltip = c("label1", "label2"))
 
 ------------------------------------------------------------------------
 
+## Video walkthroughs
+
+### Part 1 — Radar charts & player profiles
+
+{{< video https://youtu.be/c4misumzbkI >}}
+
+### Part 2 — Shot maps & transfer values
+
+{{< video https://youtu.be/OTWw1kaPuFg >}}
+
 ## Conclusion
 
 With just a few lines of R and `worldfootballR`, we connected to 3 different data sources and built a complete multi-dimensional player analysis :

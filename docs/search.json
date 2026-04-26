@@ -138,5 +138,54 @@
     "title": "",
     "section": "Projects",
     "text": "Projects\n\n\n🏥 Pharma & Clinical\nAdverse Event Explorer\nInteractive Shiny dashboard for CDISC ADaM safety data exploration.\nShiny CDISC ADaM Teal\nView project →\n\n\n⚽ Sport Analytics\nWorld Football R\nScouting reports, shot maps and transfer values for top players.\nworldfootballR ggplot2 plotly ggsoccer\nView project →\n\n\n📈 Finance\nPortfolio Risk Dashboard\nInteractive dashboard for portfolio returns and risk metrics.\nShiny quantmod tidyquant\nView project →\n\n\n\n\n20+ years in clinical programming  ·  Roche · Novartis · Debiopharm  ·  FDA · EMA · PMDA submissions  ·  R · SAS · Shiny"
+  },
+  {
+    "objectID": "projects/football/index.html#video-walkthroughs",
+    "href": "projects/football/index.html#video-walkthroughs",
+    "title": "World Football R",
+    "section": "Video walkthroughs",
+    "text": "Video walkthroughs\n\nPart 1 — Radar charts & player profiles\n\n\n\nPart 2 — Shot maps & transfer values"
+  },
+  {
+    "objectID": "projects/finance/index.html",
+    "href": "projects/finance/index.html",
+    "title": "Portfolio Dashboard",
+    "section": "",
+    "text": "An interactive portfolio dashboard built entirely in R and Quarto, pulling real-time stock data via tidyquant and Yahoo Finance.\nThe dashboard tracks 9 positions across US equities, ETFs, and commodities — with key metrics updated automatically at each render."
+  },
+  {
+    "objectID": "projects/finance/index.html#overview",
+    "href": "projects/finance/index.html#overview",
+    "title": "Portfolio Dashboard",
+    "section": "",
+    "text": "An interactive portfolio dashboard built entirely in R and Quarto, pulling real-time stock data via tidyquant and Yahoo Finance.\nThe dashboard tracks 9 positions across US equities, ETFs, and commodities — with key metrics updated automatically at each render."
+  },
+  {
+    "objectID": "projects/finance/index.html#key-metrics",
+    "href": "projects/finance/index.html#key-metrics",
+    "title": "Portfolio Dashboard",
+    "section": "Key metrics",
+    "text": "Key metrics\n\nPortfolio value and number of positions\nSharpe ratio — risk-adjusted performance\nPerformance over 1 month, 6 months, 1 year, and 5 years\nPer-stock details — PE ratio, dividend yield, current price"
+  },
+  {
+    "objectID": "projects/finance/index.html#live-dashboard",
+    "href": "projects/finance/index.html#live-dashboard",
+    "title": "Portfolio Dashboard",
+    "section": "Live dashboard",
+    "text": "Live dashboard"
+  },
+  {
+    "objectID": "projects/finance/index.html#tech-stack",
+    "href": "projects/finance/index.html#tech-stack",
+    "title": "Portfolio Dashboard",
+    "section": "Tech stack",
+    "text": "Tech stack\n\ntidyquant — stock data from Yahoo Finance\nquantmod — financial data manipulation\nggplot2 — price evolution charts\nQuarto dashboard layout"
+  },
+  {
+    "objectID": "projects/finance/index.html#source-code",
+    "href": "projects/finance/index.html#source-code",
+    "title": "Portfolio Dashboard",
+    "section": "Source code",
+    "text": "Source code\nFull code available on GitHub."
   }
 ]
