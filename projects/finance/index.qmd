@@ -2,7 +2,7 @@
 title: "Portfolio Dashboard"
 subtitle: "Personal investment portfolio tracker built with R & Quarto"
 categories: [R, Finance, Quarto, tidyquant]
-date: 2026-04-25
+date: 2024-10-25
 ---
 
 ## Overview

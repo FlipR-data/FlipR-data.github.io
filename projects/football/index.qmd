@@ -2,7 +2,7 @@
 title: "World Football R"
 subtitle: "Scouting, shot maps & transfer values with worldfootballR"
 categories: [R, Sport, ggplot2, worldfootballR]
-date: 2026-04-25
+date: 2024-08-25
 ---
 
 ## Overview
