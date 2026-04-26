@@ -1,40 +1,253 @@
 ---
 title: "World Football R"
-subtitle: "Analysis of European football statistics with R"
-categories: [R, Sport, ggplot2]
+subtitle: "Scouting, shot maps & transfer values with worldfootballR"
+categories: [R, Sport, ggplot2, worldfootballR]
 date: 2026-04-25
 ---
 
 ## Overview
 
-Analysis of European football leagues using the `worldfootballR` package. Data covers top 5 leagues — Premier League, Ligue 1, Bundesliga, Serie A, La Liga.
+This analysis showcases the power of the `worldfootballR` package — a single R package that connects to **three major football data sources** to build a complete player analysis.
 
-## Load data
+We focus on the top 4 players of the 2023 season : Kane, Mbappé, Haaland and Rodri.
 
-​\`\`\`{r} #\| message: false #\| warning: false
+| Source | Data | Function |
+|------------------------|------------------------|------------------------|
+| FBref | Scouting reports (per 90 stats) | `fb_player_scouting_report()` |
+| Understat | Shot locations & xG | `understat_player_shots()` |
+| Transfermarkt | Transfer & market values | `tm_player_transfer_history()` |
 
-library(tidyverse) library(worldfootballR)
+## Setup
 
-# Example : top scorers Ligue 1 2024
+```{r}
+#| message: false
+#| warning: false
 
-ligue1 \<- fb_league_stats( country = "FRA", gender = "M", season_end_year = 2024, tier = "1st", stat_type = "shooting" )
-
-```         
-
-## Visualisation
-
-​```{r}
-#| fig-width: 10
-#| fig-height: 6
-
-ligue1 |>
-  slice_max(Gls, n = 15) |>
-  ggplot(aes(x = reorder(Player, Gls), y = Gls)) +
-  geom_col(fill = "#0F6E56") +
-  coord_flip() +
-  labs(
-    title = "Top 15 scorers — Ligue 1 2024",
-    x = NULL, y = "Goals"
-  ) +
-  theme_minimal()
+library(worldfootballR)
+library(tidyverse)
+library(fmsb)
+library(ggsoccer)
+library(patchwork)
+library(ggtext)
+library(plotly)
 ```
+
+------------------------------------------------------------------------
+
+## Part 1 — Player profiles : Radar charts
+
+Using FBref scouting reports, we compare 11 key metrics per 90 minutes across the Big 5 leagues.
+
+```{r}
+#| eval: false
+#| code-fold: true
+#| code-summary: "Show radar chart code"
+
+data_player <- function(url) {
+
+  player_data <- fb_player_scouting_report(
+    url, "primary", time_pause = 3,
+    league_comp_name = "Last 365 Days Men's Big 5 Leagues, UCL, UEL"
+  )
+
+  parameters <- c(
+    "Goals", "xG: Expected Goals", "Pass Completion %", "Key Passes",
+    "Assists", "Touches", "Successful Take-Ons", "Tackles",
+    "GCA (Defensive Action)", "Blocks", "Clearances"
+  )
+
+  max_min <- data.frame(
+    Goals = c(1, 0), `xG: Expected Goals` = c(1, 0),
+    `Pass Completion %` = c(100, 0), Assists = c(1, 0),
+    `Key Passes` = c(4, 0), `GCA (Defensive Action)` = c(0.05, 0),
+    Tackles = c(40, 0), Blocks = c(1, 0), Clearances = c(2, 0),
+    Touches = c(300, 0), `Successful Take-Ons` = c(10, 0)
+  )
+
+  study_player <<- player_data |>
+    filter(Statistic %in% parameters) |>
+    filter(StatGroup != "Standard") |>
+    select(Statistic, Per90) |>
+    pivot_wider(names_from = Statistic, values_from = Per90)
+
+  name_player    <- paste0(player_data[1, "Player"], " (", player_data[1, "Versus"], ")")
+  names(max_min) <- names(study_player)
+  df             <- rbind(max_min, study_player)
+  rownames(df)   <- c("max", "min", name_player)
+  names(df)      <- c("Goals", "Exp. Goal", "Pass completion", "Assist",
+                      "Key Pass", "GCA (Defensive)", "Tackles", "Blocks",
+                      "Clearance", "Touches", "Successful Take-Ons")
+
+  colors_border <- c(rgb(0.2, 0.5, 0.5, 0.9), rgb(0.8, 0.2, 0.5, 0.9))
+  colors_in     <- c(rgb(0.2, 0.5, 0.5, 0.4), rgb(0.8, 0.2, 0.5, 0.4))
+
+  radarchart(df, axistype = 1,
+    pcol = colors_border, pfcol = colors_in, plwd = 4, plty = 1,
+    cglcol = "grey", cglty = 1, axislabcol = "grey",
+    caxislabels = seq(0, 1, 0.2), cglwd = 1, vlcex = 0.8
+  )
+
+  legend(x = -0.8, y = -1.2,
+    legend = rownames(df[-c(1, 2), ]),
+    bty = "n", pch = 10, col = colors_in,
+    text.col = "grey", cex = 1, pt.cex = 3
+  )
+}
+
+par(mfrow = c(2, 2), mar = c(1, 1, 1, 1), mgp = c(2, 1, 0), xpd = NA)
+data_player("https://fbref.com/en/players/21a66f6a/Harry-Kane")
+data_player("https://fbref.com/en/players/42fd9c7f/Kylian-Mbappe")
+data_player("https://fbref.com/en/players/1f44ac21/Erling-Haaland")
+data_player("https://fbref.com/en/players/6434f10d/Rodri")
+mtext("Top 4 Players 2023", side = 3, line = -1.3,
+      outer = TRUE, cex = 1.5, font = 4, col = "#0F6E56")
+```
+
+> **Key insight** : Rodri's radar looks completely different from the other three — dominant on defensive actions and passing, minimal on goals. This perfectly illustrates how a defensive midfielder compares to attackers.
+
+------------------------------------------------------------------------
+
+## Part 2 — Shot maps : Where do they score ?
+
+Using Understat data, we plot the exact location of every goal scored in the 2023/24 season, with shot type (foot/head) as colour.
+
+```{r}
+#| eval: false
+#| code-fold: true
+#| code-summary: "Show shot map code"
+
+mbappe  <- understat_player_shots("https://understat.com/player/3423") |>
+           filter(season == 2023, result == "Goal") |>
+           mutate(shotType = as.factor(shotType))
+
+rodri   <- understat_player_shots("https://understat.com/player/2496") |>
+           filter(season == 2023, result == "Goal") |>
+           mutate(shotType = as.factor(shotType))
+
+kane    <- understat_player_shots("https://understat.com/player/647") |>
+           filter(season == 2023, result == "Goal") |>
+           mutate(shotType = as.factor(shotType))
+
+haaland <- understat_player_shots("https://understat.com/player/8260") |>
+           filter(season == 2023, result == "Goal") |>
+           mutate(shotType = as.factor(shotType))
+
+shotType_levels <- c("Head", "LeftFoot", "OtherBodyPart", "RightFoot")
+mbappe$shoTypeT  <- factor(mbappe$shotType,  levels = shotType_levels)
+rodri$shoTypeT   <- factor(rodri$shotType,   levels = shotType_levels)
+kane$shoTypeT    <- factor(kane$shotType,    levels = shotType_levels)
+haaland$shoTypeT <- factor(haaland$shotType, levels = shotType_levels)
+
+map_shot <- function(data, player_name) {
+  data <- data |> mutate(x = X * 100, y = Y * 100)
+  n    <- nrow(data)
+
+  ggplot(data) +
+    annotate_pitch(colour = "white", fill = "springgreen4", limits = FALSE) +
+    geom_jitter(aes(x = x, y = y, colour = shoTypeT),
+                width = 1, height = 1, size = 2) +
+    theme_pitch() +
+    theme(panel.background = element_rect(fill = "springgreen4")) +
+    coord_flip(xlim = c(49, 101)) +
+    scale_y_reverse() +
+    scale_color_discrete(drop = FALSE) +
+    ggtitle(player_name, paste0("Number of goals: ", n)) +
+    theme(panel.border  = element_rect(color = "black", fill = NA, size = 3),
+          plot.title    = element_text(hjust = 0.5))
+}
+
+plot1 <- map_shot(mbappe,  "Kylian Mbappé")  + guides(colour = "none")
+plot2 <- map_shot(rodri,   "Rodri")          + guides(colour = "none")
+plot3 <- map_shot(kane,    "Harry Kane")     + guides(colour = "none")
+plot4 <- map_shot(haaland, "Erling Haaland")
+
+plot1 + plot2 + plot3 + plot4 +
+  plot_layout(guides = "collect") +
+  plot_annotation(
+    title    = "Goal positions — Top 4 players",
+    subtitle = "Season 2023/2024",
+    caption  = "Source: understat.com via worldfootballR"
+  )
+```
+
+The interactive version below lets you hover over each goal to see the xG value, shot type, assist provider, and match details.
+
+```{r}
+#| eval: false
+#| code-fold: true
+#| code-summary: "Show interactive version"
+
+map_shot_v <- function(data, player_name) {
+  data <- data |>
+    mutate(x = X * 100, y = Y * 100,
+           xG2    = round(xG, 2),
+           match_ = paste0(home_team, " - ", away_team))
+  n <- nrow(data)
+
+  p <- ggplot(data) +
+    annotate_pitch(colour = "white", fill = "springgreen4", limits = FALSE) +
+    geom_point(aes(x = x, y = y, label1 = xG2, label2 = shotType,
+                   label3 = player_assisted, label4 = match_),
+               size = 2, colour = "blue") +
+    theme_pitch() +
+    theme(panel.background = element_rect(fill = "springgreen4")) +
+    coord_flip(xlim = c(49, 101)) +
+    scale_y_reverse() +
+    ggtitle(paste0(player_name, " — Goals 2023/2024"))
+
+  ggplotly(p, tooltip = c("label1", "label2", "label3", "label4"))
+}
+
+map_shot_v(kane, "Harry Kane")
+```
+
+> **Key insight** : Haaland scores almost exclusively inside the box — a pure penalty-area striker. Mbappé shows a wider spread, reflecting his ability to create and finish from various positions.
+
+------------------------------------------------------------------------
+
+## Part 3 — Transfer market values
+
+Using Transfermarkt data, we track how each player's market value has evolved over their career.
+
+```{r}
+#| eval: false
+#| code-fold: true
+#| code-summary: "Show transfer value code"
+
+haaland <- tm_player_transfer_history("https://www.transfermarkt.com/erling-haaland/profil/spieler/418560")
+mbappe  <- tm_player_transfer_history("https://www.transfermarkt.com/kylian-mbappe/profil/spieler/342229")
+kane    <- tm_player_transfer_history("https://www.transfermarkt.com/harry-kane/profil/spieler/132098")
+rodri   <- tm_player_transfer_history("https://www.transfermarkt.com/rodri/profil/spieler/357565")
+
+kane_2    <- kane    |> filter(complete.cases(pick(transfer_date, market_value)))
+rodri_2   <- rodri   |> filter(complete.cases(pick(transfer_date, market_value)))
+haaland_2 <- haaland |> filter(complete.cases(pick(transfer_date, market_value)))
+mbappe_2  <- mbappe  |> filter(complete.cases(pick(transfer_date, market_value)))
+
+the_four <- bind_rows(haaland_2, mbappe_2, kane_2, rodri_2)
+
+p <- ggplot(the_four, aes(x = transfer_date, y = market_value, color = player_name)) +
+  geom_line() +
+  geom_point(aes(label1 = team_to, label2 = market_value)) +
+  labs(x = "Date", y = "Market Value",
+       title  = "Top 4 — Transfer Market Value History",
+       colour = "Player") 
+
+ggplotly(p, tooltip = c("label1", "label2"))
+```
+
+> **Key insight** : Mbappé's value peaked earliest and highest — a reflection of his extraordinary rise at Monaco and PSG. Haaland's curve is the steepest, driven by his Bundesliga and Premier League performances.
+
+------------------------------------------------------------------------
+
+## Conclusion
+
+With just a few lines of R and `worldfootballR`, we connected to 3 different data sources and built a complete multi-dimensional player analysis :
+
+-   **Who are they** as players ? → Radar charts
+-   **How do they score** ? → Shot maps\
+-   **What is their value** ? → Transfer history
+
+## Source code
+
+Full code available on [GitHub](https://github.com/FlipR-data/worldFootballR).

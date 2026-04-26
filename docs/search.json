@@ -4,14 +4,14 @@
     "href": "projects/football/index.html",
     "title": "World Football R",
     "section": "",
-    "text": "Analysis of European football leagues using the worldfootballR package. Data covers top 5 leagues — Premier League, Ligue 1, Bundesliga, Serie A, La Liga."
+    "text": "This analysis showcases the power of the worldfootballR package — a single R package that connects to three major football data sources to build a complete player analysis.\nWe focus on the top 4 players of the 2023 season : Kane, Mbappé, Haaland and Rodri.\n\n\n\n\n\n\n\n\nSource\nData\nFunction\n\n\n\n\nFBref\nScouting reports (per 90 stats)\nfb_player_scouting_report()\n\n\nUnderstat\nShot locations & xG\nunderstat_player_shots()\n\n\nTransfermarkt\nTransfer & market values\ntm_player_transfer_history()"
   },
   {
     "objectID": "projects/football/index.html#overview",
     "href": "projects/football/index.html#overview",
     "title": "World Football R",
     "section": "",
-    "text": "Analysis of European football leagues using the worldfootballR package. Data covers top 5 leagues — Premier League, Ligue 1, Bundesliga, Serie A, La Liga."
+    "text": "This analysis showcases the power of the worldfootballR package — a single R package that connects to three major football data sources to build a complete player analysis.\nWe focus on the top 4 players of the 2023 season : Kane, Mbappé, Haaland and Rodri.\n\n\n\n\n\n\n\n\nSource\nData\nFunction\n\n\n\n\nFBref\nScouting reports (per 90 stats)\nfb_player_scouting_report()\n\n\nUnderstat\nShot locations & xG\nunderstat_player_shots()\n\n\nTransfermarkt\nTransfer & market values\ntm_player_transfer_history()"
   },
   {
     "objectID": "projects/football/index.html#load-data",
@@ -46,7 +46,7 @@
     "href": "index.html",
     "title": "",
     "section": "",
-    "text": "Code\n\n\n\n\n\nFlipR-data\n\nStatistical Programmer · R · Shiny\n\n\n\n\n🏥 Pharma & Clinical\nAdverse Event Explorer\nInteractive Shiny dashboard for CDISC ADaM safety data exploration.\nShiny CDISC ADaM\nView project →\n\n\n⚽ Sport Analytics\nWorld Football R\nAnalysis and visualisation of football statistics across Europe’s top leagues.\nggplot2 worldfootballR tidyverse\nView project →\n\n\n📈 Finance\nPortfolio Risk Dashboard\nInteractive dashboard for portfolio returns and risk metrics.\nShiny quantmod tidyquant\nView project →"
+    "text": "Code"
   },
   {
     "objectID": "about.html#summary",
@@ -89,5 +89,54 @@
     "title": "",
     "section": "Contact",
     "text": "Contact\n\n💼 LinkedIn\n📧 remusatp@yahoo.fr\n🐙 GitHub"
+  },
+  {
+    "objectID": "projects/football/index.html#setup",
+    "href": "projects/football/index.html#setup",
+    "title": "World Football R",
+    "section": "Setup",
+    "text": "Setup\n\n\nCode\nlibrary(worldfootballR)\nlibrary(tidyverse)\nlibrary(fmsb)\nlibrary(ggsoccer)\nlibrary(patchwork)\nlibrary(ggtext)\nlibrary(plotly)"
+  },
+  {
+    "objectID": "projects/football/index.html#part-1-player-profiles-radar-charts",
+    "href": "projects/football/index.html#part-1-player-profiles-radar-charts",
+    "title": "World Football R",
+    "section": "Part 1 — Player profiles : Radar charts",
+    "text": "Part 1 — Player profiles : Radar charts\nUsing FBref scouting reports, we compare 11 key metrics per 90 minutes across the Big 5 leagues.\n\n\nShow radar chart code\ndata_player &lt;- function(url) {\n\n  player_data &lt;- fb_player_scouting_report(\n    url, \"primary\", time_pause = 3,\n    league_comp_name = \"Last 365 Days Men's Big 5 Leagues, UCL, UEL\"\n  )\n\n  parameters &lt;- c(\n    \"Goals\", \"xG: Expected Goals\", \"Pass Completion %\", \"Key Passes\",\n    \"Assists\", \"Touches\", \"Successful Take-Ons\", \"Tackles\",\n    \"GCA (Defensive Action)\", \"Blocks\", \"Clearances\"\n  )\n\n  max_min &lt;- data.frame(\n    Goals = c(1, 0), `xG: Expected Goals` = c(1, 0),\n    `Pass Completion %` = c(100, 0), Assists = c(1, 0),\n    `Key Passes` = c(4, 0), `GCA (Defensive Action)` = c(0.05, 0),\n    Tackles = c(40, 0), Blocks = c(1, 0), Clearances = c(2, 0),\n    Touches = c(300, 0), `Successful Take-Ons` = c(10, 0)\n  )\n\n  study_player &lt;&lt;- player_data |&gt;\n    filter(Statistic %in% parameters) |&gt;\n    filter(StatGroup != \"Standard\") |&gt;\n    select(Statistic, Per90) |&gt;\n    pivot_wider(names_from = Statistic, values_from = Per90)\n\n  name_player    &lt;- paste0(player_data[1, \"Player\"], \" (\", player_data[1, \"Versus\"], \")\")\n  names(max_min) &lt;- names(study_player)\n  df             &lt;- rbind(max_min, study_player)\n  rownames(df)   &lt;- c(\"max\", \"min\", name_player)\n  names(df)      &lt;- c(\"Goals\", \"Exp. Goal\", \"Pass completion\", \"Assist\",\n                      \"Key Pass\", \"GCA (Defensive)\", \"Tackles\", \"Blocks\",\n                      \"Clearance\", \"Touches\", \"Successful Take-Ons\")\n\n  colors_border &lt;- c(rgb(0.2, 0.5, 0.5, 0.9), rgb(0.8, 0.2, 0.5, 0.9))\n  colors_in     &lt;- c(rgb(0.2, 0.5, 0.5, 0.4), rgb(0.8, 0.2, 0.5, 0.4))\n\n  radarchart(df, axistype = 1,\n    pcol = colors_border, pfcol = colors_in, plwd = 4, plty = 1,\n    cglcol = \"grey\", cglty = 1, axislabcol = \"grey\",\n    caxislabels = seq(0, 1, 0.2), cglwd = 1, vlcex = 0.8\n  )\n\n  legend(x = -0.8, y = -1.2,\n    legend = rownames(df[-c(1, 2), ]),\n    bty = \"n\", pch = 10, col = colors_in,\n    text.col = \"grey\", cex = 1, pt.cex = 3\n  )\n}\n\npar(mfrow = c(2, 2), mar = c(1, 1, 1, 1), mgp = c(2, 1, 0), xpd = NA)\ndata_player(\"https://fbref.com/en/players/21a66f6a/Harry-Kane\")\ndata_player(\"https://fbref.com/en/players/42fd9c7f/Kylian-Mbappe\")\ndata_player(\"https://fbref.com/en/players/1f44ac21/Erling-Haaland\")\ndata_player(\"https://fbref.com/en/players/6434f10d/Rodri\")\nmtext(\"Top 4 Players 2023\", side = 3, line = -1.3,\n      outer = TRUE, cex = 1.5, font = 4, col = \"#0F6E56\")\n\n\n\nKey insight : Rodri’s radar looks completely different from the other three — dominant on defensive actions and passing, minimal on goals. This perfectly illustrates how a defensive midfielder compares to attackers."
+  },
+  {
+    "objectID": "projects/football/index.html#part-2-shot-maps-where-do-they-score",
+    "href": "projects/football/index.html#part-2-shot-maps-where-do-they-score",
+    "title": "World Football R",
+    "section": "Part 2 — Shot maps : Where do they score ?",
+    "text": "Part 2 — Shot maps : Where do they score ?\nUsing Understat data, we plot the exact location of every goal scored in the 2023/24 season, with shot type (foot/head) as colour.\n\n\nShow shot map code\nmbappe  &lt;- understat_player_shots(\"https://understat.com/player/3423\") |&gt;\n           filter(season == 2023, result == \"Goal\") |&gt;\n           mutate(shotType = as.factor(shotType))\n\nrodri   &lt;- understat_player_shots(\"https://understat.com/player/2496\") |&gt;\n           filter(season == 2023, result == \"Goal\") |&gt;\n           mutate(shotType = as.factor(shotType))\n\nkane    &lt;- understat_player_shots(\"https://understat.com/player/647\") |&gt;\n           filter(season == 2023, result == \"Goal\") |&gt;\n           mutate(shotType = as.factor(shotType))\n\nhaaland &lt;- understat_player_shots(\"https://understat.com/player/8260\") |&gt;\n           filter(season == 2023, result == \"Goal\") |&gt;\n           mutate(shotType = as.factor(shotType))\n\nshotType_levels &lt;- c(\"Head\", \"LeftFoot\", \"OtherBodyPart\", \"RightFoot\")\nmbappe$shoTypeT  &lt;- factor(mbappe$shotType,  levels = shotType_levels)\nrodri$shoTypeT   &lt;- factor(rodri$shotType,   levels = shotType_levels)\nkane$shoTypeT    &lt;- factor(kane$shotType,    levels = shotType_levels)\nhaaland$shoTypeT &lt;- factor(haaland$shotType, levels = shotType_levels)\n\nmap_shot &lt;- function(data, player_name) {\n  data &lt;- data |&gt; mutate(x = X * 100, y = Y * 100)\n  n    &lt;- nrow(data)\n\n  ggplot(data) +\n    annotate_pitch(colour = \"white\", fill = \"springgreen4\", limits = FALSE) +\n    geom_jitter(aes(x = x, y = y, colour = shoTypeT),\n                width = 1, height = 1, size = 2) +\n    theme_pitch() +\n    theme(panel.background = element_rect(fill = \"springgreen4\")) +\n    coord_flip(xlim = c(49, 101)) +\n    scale_y_reverse() +\n    scale_color_discrete(drop = FALSE) +\n    ggtitle(player_name, paste0(\"Number of goals: \", n)) +\n    theme(panel.border  = element_rect(color = \"black\", fill = NA, size = 3),\n          plot.title    = element_text(hjust = 0.5))\n}\n\nplot1 &lt;- map_shot(mbappe,  \"Kylian Mbappé\")  + guides(colour = \"none\")\nplot2 &lt;- map_shot(rodri,   \"Rodri\")          + guides(colour = \"none\")\nplot3 &lt;- map_shot(kane,    \"Harry Kane\")     + guides(colour = \"none\")\nplot4 &lt;- map_shot(haaland, \"Erling Haaland\")\n\nplot1 + plot2 + plot3 + plot4 +\n  plot_layout(guides = \"collect\") +\n  plot_annotation(\n    title    = \"Goal positions — Top 4 players\",\n    subtitle = \"Season 2023/2024\",\n    caption  = \"Source: understat.com via worldfootballR\"\n  )\n\n\nThe interactive version below lets you hover over each goal to see the xG value, shot type, assist provider, and match details.\n\n\nShow interactive version\nmap_shot_v &lt;- function(data, player_name) {\n  data &lt;- data |&gt;\n    mutate(x = X * 100, y = Y * 100,\n           xG2    = round(xG, 2),\n           match_ = paste0(home_team, \" - \", away_team))\n  n &lt;- nrow(data)\n\n  p &lt;- ggplot(data) +\n    annotate_pitch(colour = \"white\", fill = \"springgreen4\", limits = FALSE) +\n    geom_point(aes(x = x, y = y, label1 = xG2, label2 = shotType,\n                   label3 = player_assisted, label4 = match_),\n               size = 2, colour = \"blue\") +\n    theme_pitch() +\n    theme(panel.background = element_rect(fill = \"springgreen4\")) +\n    coord_flip(xlim = c(49, 101)) +\n    scale_y_reverse() +\n    ggtitle(paste0(player_name, \" — Goals 2023/2024\"))\n\n  ggplotly(p, tooltip = c(\"label1\", \"label2\", \"label3\", \"label4\"))\n}\n\nmap_shot_v(kane, \"Harry Kane\")\n\n\n\nKey insight : Haaland scores almost exclusively inside the box — a pure penalty-area striker. Mbappé shows a wider spread, reflecting his ability to create and finish from various positions."
+  },
+  {
+    "objectID": "projects/football/index.html#part-3-transfer-market-values",
+    "href": "projects/football/index.html#part-3-transfer-market-values",
+    "title": "World Football R",
+    "section": "Part 3 — Transfer market values",
+    "text": "Part 3 — Transfer market values\nUsing Transfermarkt data, we track how each player’s market value has evolved over their career.\n\n\nShow transfer value code\nhaaland &lt;- tm_player_transfer_history(\"https://www.transfermarkt.com/erling-haaland/profil/spieler/418560\")\nmbappe  &lt;- tm_player_transfer_history(\"https://www.transfermarkt.com/kylian-mbappe/profil/spieler/342229\")\nkane    &lt;- tm_player_transfer_history(\"https://www.transfermarkt.com/harry-kane/profil/spieler/132098\")\nrodri   &lt;- tm_player_transfer_history(\"https://www.transfermarkt.com/rodri/profil/spieler/357565\")\n\nkane_2    &lt;- kane    |&gt; filter(complete.cases(pick(transfer_date, market_value)))\nrodri_2   &lt;- rodri   |&gt; filter(complete.cases(pick(transfer_date, market_value)))\nhaaland_2 &lt;- haaland |&gt; filter(complete.cases(pick(transfer_date, market_value)))\nmbappe_2  &lt;- mbappe  |&gt; filter(complete.cases(pick(transfer_date, market_value)))\n\nthe_four &lt;- bind_rows(haaland_2, mbappe_2, kane_2, rodri_2)\n\np &lt;- ggplot(the_four, aes(x = transfer_date, y = market_value, color = player_name)) +\n  geom_line() +\n  geom_point(aes(label1 = team_to, label2 = market_value)) +\n  labs(x = \"Date\", y = \"Market Value\",\n       title  = \"Top 4 — Transfer Market Value History\",\n       colour = \"Player\") \n\nggplotly(p, tooltip = c(\"label1\", \"label2\"))\n\n\n\nKey insight : Mbappé’s value peaked earliest and highest — a reflection of his extraordinary rise at Monaco and PSG. Haaland’s curve is the steepest, driven by his Bundesliga and Premier League performances."
+  },
+  {
+    "objectID": "projects/football/index.html#conclusion",
+    "href": "projects/football/index.html#conclusion",
+    "title": "World Football R",
+    "section": "Conclusion",
+    "text": "Conclusion\nWith just a few lines of R and worldfootballR, we connected to 3 different data sources and built a complete multi-dimensional player analysis :\n\nWho are they as players ? → Radar charts\nHow do they score ? → Shot maps\n\nWhat is their value ? → Transfer history"
+  },
+  {
+    "objectID": "projects/football/index.html#source-code",
+    "href": "projects/football/index.html#source-code",
+    "title": "World Football R",
+    "section": "Source code",
+    "text": "Source code\nFull code available on GitHub."
+  },
+  {
+    "objectID": "index.html#projects",
+    "href": "index.html#projects",
+    "title": "",
+    "section": "Projects",
+    "text": "Projects\n\n\n🏥 Pharma & Clinical\nAdverse Event Explorer\nInteractive Shiny dashboard for CDISC ADaM safety data exploration.\nShiny CDISC ADaM Teal\nView project →\n\n\n⚽ Sport Analytics\nWorld Football R\nScouting reports, shot maps and transfer values for top players.\nworldfootballR ggplot2 plotly ggsoccer\nView project →\n\n\n📈 Finance\nPortfolio Risk Dashboard\nInteractive dashboard for portfolio returns and risk metrics.\nShiny quantmod tidyquant\nView project →\n\n\n\n\n20+ years in clinical programming  ·  Roche · Novartis · Debiopharm  ·  FDA · EMA · PMDA submissions  ·  R · SAS · Shiny"
   }
 ]

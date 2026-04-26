@@ -1,37 +1,54 @@
 ---
 title: ""
 page-layout: full
+toc: false
 ---
 
-::: {.hero}
-# FlipR-data
-### Statistical Programmer · R · Shiny
+::: hero
+# Philippe Remusat
+
+### Principal Statistical Programmer · R · Shiny
+
+Bridging clinical data science and modern open source — from FDA submissions to interactive dashboards.
+
+[View projects ↓](#projects)    [About me](about.qmd)    [GitHub](https://github.com/FlipR-data)
 :::
 
-::: {.project-grid}
+------------------------------------------------------------------------
 
-::: {.project-card}
-### 🏥 Pharma & Clinical
-**Adverse Event Explorer**  
-Interactive Shiny dashboard for CDISC ADaM safety data exploration.  
-`Shiny` `CDISC` `ADaM`  
+## Projects {#projects}
+
+:::::: project-grid
+::: project-card
+#### 🏥 Pharma & Clinical
+
+**Adverse Event Explorer**\
+Interactive Shiny dashboard for CDISC ADaM safety data exploration.\
+`Shiny` `CDISC` `ADaM` `Teal`\
 [View project →](projects/pharma/index.qmd)
 :::
 
-::: {.project-card}
-### ⚽ Sport Analytics
-**World Football R**  
-Analysis and visualisation of football statistics across Europe's top leagues.  
-`ggplot2` `worldfootballR` `tidyverse`  
+::: project-card
+#### ⚽ Sport Analytics
+
+**World Football R**\
+Scouting reports, shot maps and transfer values for top players.\
+`worldfootballR` `ggplot2` `plotly` `ggsoccer`\
 [View project →](projects/football/index.qmd)
 :::
 
-::: {.project-card}
-### 📈 Finance
-**Portfolio Risk Dashboard**  
-Interactive dashboard for portfolio returns and risk metrics.  
-`Shiny` `quantmod` `tidyquant`  
+::: project-card
+#### 📈 Finance
+
+**Portfolio Risk Dashboard**\
+Interactive dashboard for portfolio returns and risk metrics.\
+`Shiny` `quantmod` `tidyquant`\
 [View project →](projects/finance/index.qmd)
 :::
+::::::
 
+------------------------------------------------------------------------
+
+::: about-strip
+**20+ years** in clinical programming  ·  **Roche · Novartis · Debiopharm**  ·  **FDA · EMA · PMDA** submissions  ·  **R · SAS · Shiny**
 :::

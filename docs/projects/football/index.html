@@ -75,7 +75,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-f4fe3daa038b9e8d2c2be520bb0fe3d0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-9bb23efc78ccd20fd8122f99113dadf4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-6b8eb38292a858c5bfc89abf032535af.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -156,8 +156,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
-  <li><a href="#load-data" id="toc-load-data" class="nav-link" data-scroll-target="#load-data">Load data</a></li>
-  <li><a href="#example-top-scorers-ligue-1-2024" id="toc-example-top-scorers-ligue-1-2024" class="nav-link" data-scroll-target="#example-top-scorers-ligue-1-2024">Example : top scorers Ligue 1 2024</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#part-1-player-profiles-radar-charts" id="toc-part-1-player-profiles-radar-charts" class="nav-link" data-scroll-target="#part-1-player-profiles-radar-charts">Part 1 — Player profiles : Radar charts</a></li>
+  <li><a href="#part-2-shot-maps-where-do-they-score" id="toc-part-2-shot-maps-where-do-they-score" class="nav-link" data-scroll-target="#part-2-shot-maps-where-do-they-score">Part 2 — Shot maps : Where do they score ?</a></li>
+  <li><a href="#part-3-transfer-market-values" id="toc-part-3-transfer-market-values" class="nav-link" data-scroll-target="#part-3-transfer-market-values">Part 3 — Transfer market values</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  <li><a href="#source-code" id="toc-source-code" class="nav-link" data-scroll-target="#source-code">Source code</a></li>
   </ul>
 </nav>
     </div>
@@ -166,12 +170,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">World Football R</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
-<p class="subtitle lead">Analysis of European football statistics with R</p>
+<div class="quarto-title-block"><div><h1 class="title">World Football R</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+<p class="subtitle lead">Scouting, shot maps &amp; transfer values with worldfootballR</p>
   <div class="quarto-categories">
     <div class="quarto-category">R</div>
     <div class="quarto-category">Sport</div>
     <div class="quarto-category">ggplot2</div>
+    <div class="quarto-category">worldfootballR</div>
   </div>
   </div>
 
@@ -197,33 +202,266 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="overview" class="level2">
 <h2 class="anchored" data-anchor-id="overview">Overview</h2>
-<p>Analysis of European football leagues using the <code>worldfootballR</code> package. Data covers top 5 leagues — Premier League, Ligue 1, Bundesliga, Serie A, La Liga.</p>
+<p>This analysis showcases the power of the <code>worldfootballR</code> package — a single R package that connects to <strong>three major football data sources</strong> to build a complete player analysis.</p>
+<p>We focus on the top 4 players of the 2023 season : Kane, Mbappé, Haaland and Rodri.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Source</th>
+<th>Data</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FBref</td>
+<td>Scouting reports (per 90 stats)</td>
+<td><code>fb_player_scouting_report()</code></td>
+</tr>
+<tr class="even">
+<td>Understat</td>
+<td>Shot locations &amp; xG</td>
+<td><code>understat_player_shots()</code></td>
+</tr>
+<tr class="odd">
+<td>Transfermarkt</td>
+<td>Transfer &amp; market values</td>
+<td><code>tm_player_transfer_history()</code></td>
+</tr>
+</tbody>
+</table>
 </section>
-<section id="load-data" class="level2">
-<h2 class="anchored" data-anchor-id="load-data">Load data</h2>
-<p>​```{r} #| message: false #| warning: false</p>
-<p>library(tidyverse) library(worldfootballR)</p>
+<section id="setup" class="level2">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(worldfootballR)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fmsb)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggsoccer)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggtext)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotly)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<hr>
 </section>
-<section id="example-top-scorers-ligue-1-2024" class="level1">
-<h1>Example : top scorers Ligue 1 2024</h1>
-<p>ligue1 &lt;- fb_league_stats( country = “FRA”, gender = “M”, season_end_year = 2024, tier = “1st”, stat_type = “shooting” )</p>
-<pre><code>
-## Visualisation
-
-​```{r}
-#| fig-width: 10
-#| fig-height: 6
-
-ligue1 |&gt;
-  slice_max(Gls, n = 15) |&gt;
-  ggplot(aes(x = reorder(Player, Gls), y = Gls)) +
-  geom_col(fill = "#0F6E56") +
-  coord_flip() +
-  labs(
-    title = "Top 15 scorers — Ligue 1 2024",
-    x = NULL, y = "Goals"
-  ) +
-  theme_minimal()</code></pre>
+<section id="part-1-player-profiles-radar-charts" class="level2">
+<h2 class="anchored" data-anchor-id="part-1-player-profiles-radar-charts">Part 1 — Player profiles : Radar charts</h2>
+<p>Using FBref scouting reports, we compare 11 key metrics per 90 minutes across the Big 5 leagues.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show radar chart code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data_player <span class="ot">&lt;-</span> <span class="cf">function</span>(url) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  player_data <span class="ot">&lt;-</span> <span class="fu">fb_player_scouting_report</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    url, <span class="st">"primary"</span>, <span class="at">time_pause =</span> <span class="dv">3</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">league_comp_name =</span> <span class="st">"Last 365 Days Men's Big 5 Leagues, UCL, UEL"</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  parameters <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Goals"</span>, <span class="st">"xG: Expected Goals"</span>, <span class="st">"Pass Completion %"</span>, <span class="st">"Key Passes"</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Assists"</span>, <span class="st">"Touches"</span>, <span class="st">"Successful Take-Ons"</span>, <span class="st">"Tackles"</span>,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"GCA (Defensive Action)"</span>, <span class="st">"Blocks"</span>, <span class="st">"Clearances"</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  max_min <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">Goals =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>), <span class="st">`</span><span class="at">xG: Expected Goals</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Pass Completion %</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">0</span>), <span class="at">Assists =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Key Passes</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">0</span>), <span class="st">`</span><span class="at">GCA (Defensive Action)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="dv">0</span>),</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">Tackles =</span> <span class="fu">c</span>(<span class="dv">40</span>, <span class="dv">0</span>), <span class="at">Blocks =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>), <span class="at">Clearances =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">0</span>),</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">Touches =</span> <span class="fu">c</span>(<span class="dv">300</span>, <span class="dv">0</span>), <span class="st">`</span><span class="at">Successful Take-Ons</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">0</span>)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  study_player <span class="ot">&lt;&lt;-</span> player_data <span class="sc">|&gt;</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(Statistic <span class="sc">%in%</span> parameters) <span class="sc">|&gt;</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(StatGroup <span class="sc">!=</span> <span class="st">"Standard"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(Statistic, Per90) <span class="sc">|&gt;</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> Statistic, <span class="at">values_from =</span> Per90)</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>  name_player    <span class="ot">&lt;-</span> <span class="fu">paste0</span>(player_data[<span class="dv">1</span>, <span class="st">"Player"</span>], <span class="st">" ("</span>, player_data[<span class="dv">1</span>, <span class="st">"Versus"</span>], <span class="st">")"</span>)</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(max_min) <span class="ot">&lt;-</span> <span class="fu">names</span>(study_player)</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>  df             <span class="ot">&lt;-</span> <span class="fu">rbind</span>(max_min, study_player)</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames</span>(df)   <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"max"</span>, <span class="st">"min"</span>, name_player)</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(df)      <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Goals"</span>, <span class="st">"Exp. Goal"</span>, <span class="st">"Pass completion"</span>, <span class="st">"Assist"</span>,</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"Key Pass"</span>, <span class="st">"GCA (Defensive)"</span>, <span class="st">"Tackles"</span>, <span class="st">"Blocks"</span>,</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"Clearance"</span>, <span class="st">"Touches"</span>, <span class="st">"Successful Take-Ons"</span>)</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>  colors_border <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rgb</span>(<span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>), <span class="fu">rgb</span>(<span class="fl">0.8</span>, <span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>))</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>  colors_in     <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rgb</span>(<span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.4</span>), <span class="fu">rgb</span>(<span class="fl">0.8</span>, <span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">0.4</span>))</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">radarchart</span>(df, <span class="at">axistype =</span> <span class="dv">1</span>,</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">pcol =</span> colors_border, <span class="at">pfcol =</span> colors_in, <span class="at">plwd =</span> <span class="dv">4</span>, <span class="at">plty =</span> <span class="dv">1</span>,</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">cglcol =</span> <span class="st">"grey"</span>, <span class="at">cglty =</span> <span class="dv">1</span>, <span class="at">axislabcol =</span> <span class="st">"grey"</span>,</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">caxislabels =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.2</span>), <span class="at">cglwd =</span> <span class="dv">1</span>, <span class="at">vlcex =</span> <span class="fl">0.8</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">legend</span>(<span class="at">x =</span> <span class="sc">-</span><span class="fl">0.8</span>, <span class="at">y =</span> <span class="sc">-</span><span class="fl">1.2</span>,</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend =</span> <span class="fu">rownames</span>(df[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), ]),</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">bty =</span> <span class="st">"n"</span>, <span class="at">pch =</span> <span class="dv">10</span>, <span class="at">col =</span> colors_in,</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">text.col =</span> <span class="st">"grey"</span>, <span class="at">cex =</span> <span class="dv">1</span>, <span class="at">pt.cex =</span> <span class="dv">3</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>), <span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">mgp =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="at">xpd =</span> <span class="cn">NA</span>)</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="fu">data_player</span>(<span class="st">"https://fbref.com/en/players/21a66f6a/Harry-Kane"</span>)</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="fu">data_player</span>(<span class="st">"https://fbref.com/en/players/42fd9c7f/Kylian-Mbappe"</span>)</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="fu">data_player</span>(<span class="st">"https://fbref.com/en/players/1f44ac21/Erling-Haaland"</span>)</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="fu">data_player</span>(<span class="st">"https://fbref.com/en/players/6434f10d/Rodri"</span>)</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a><span class="fu">mtext</span>(<span class="st">"Top 4 Players 2023"</span>, <span class="at">side =</span> <span class="dv">3</span>, <span class="at">line =</span> <span class="sc">-</span><span class="fl">1.3</span>,</span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>      <span class="at">outer =</span> <span class="cn">TRUE</span>, <span class="at">cex =</span> <span class="fl">1.5</span>, <span class="at">font =</span> <span class="dv">4</span>, <span class="at">col =</span> <span class="st">"#0F6E56"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<blockquote class="blockquote">
+<p><strong>Key insight</strong> : Rodri’s radar looks completely different from the other three — dominant on defensive actions and passing, minimal on goals. This perfectly illustrates how a defensive midfielder compares to attackers.</p>
+</blockquote>
+<hr>
+</section>
+<section id="part-2-shot-maps-where-do-they-score" class="level2">
+<h2 class="anchored" data-anchor-id="part-2-shot-maps-where-do-they-score">Part 2 — Shot maps : Where do they score ?</h2>
+<p>Using Understat data, we plot the exact location of every goal scored in the 2023/24 season, with shot type (foot/head) as colour.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show shot map code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mbappe  <span class="ot">&lt;-</span> <span class="fu">understat_player_shots</span>(<span class="st">"https://understat.com/player/3423"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>           <span class="fu">filter</span>(season <span class="sc">==</span> <span class="dv">2023</span>, result <span class="sc">==</span> <span class="st">"Goal"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>           <span class="fu">mutate</span>(<span class="at">shotType =</span> <span class="fu">as.factor</span>(shotType))</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>rodri   <span class="ot">&lt;-</span> <span class="fu">understat_player_shots</span>(<span class="st">"https://understat.com/player/2496"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>           <span class="fu">filter</span>(season <span class="sc">==</span> <span class="dv">2023</span>, result <span class="sc">==</span> <span class="st">"Goal"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>           <span class="fu">mutate</span>(<span class="at">shotType =</span> <span class="fu">as.factor</span>(shotType))</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>kane    <span class="ot">&lt;-</span> <span class="fu">understat_player_shots</span>(<span class="st">"https://understat.com/player/647"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>           <span class="fu">filter</span>(season <span class="sc">==</span> <span class="dv">2023</span>, result <span class="sc">==</span> <span class="st">"Goal"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>           <span class="fu">mutate</span>(<span class="at">shotType =</span> <span class="fu">as.factor</span>(shotType))</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>haaland <span class="ot">&lt;-</span> <span class="fu">understat_player_shots</span>(<span class="st">"https://understat.com/player/8260"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>           <span class="fu">filter</span>(season <span class="sc">==</span> <span class="dv">2023</span>, result <span class="sc">==</span> <span class="st">"Goal"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>           <span class="fu">mutate</span>(<span class="at">shotType =</span> <span class="fu">as.factor</span>(shotType))</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>shotType_levels <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Head"</span>, <span class="st">"LeftFoot"</span>, <span class="st">"OtherBodyPart"</span>, <span class="st">"RightFoot"</span>)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>mbappe<span class="sc">$</span>shoTypeT  <span class="ot">&lt;-</span> <span class="fu">factor</span>(mbappe<span class="sc">$</span>shotType,  <span class="at">levels =</span> shotType_levels)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>rodri<span class="sc">$</span>shoTypeT   <span class="ot">&lt;-</span> <span class="fu">factor</span>(rodri<span class="sc">$</span>shotType,   <span class="at">levels =</span> shotType_levels)</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>kane<span class="sc">$</span>shoTypeT    <span class="ot">&lt;-</span> <span class="fu">factor</span>(kane<span class="sc">$</span>shotType,    <span class="at">levels =</span> shotType_levels)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>haaland<span class="sc">$</span>shoTypeT <span class="ot">&lt;-</span> <span class="fu">factor</span>(haaland<span class="sc">$</span>shotType, <span class="at">levels =</span> shotType_levels)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>map_shot <span class="ot">&lt;-</span> <span class="cf">function</span>(data, player_name) {</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">x =</span> X <span class="sc">*</span> <span class="dv">100</span>, <span class="at">y =</span> Y <span class="sc">*</span> <span class="dv">100</span>)</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  n    <span class="ot">&lt;-</span> <span class="fu">nrow</span>(data)</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(data) <span class="sc">+</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotate_pitch</span>(<span class="at">colour =</span> <span class="st">"white"</span>, <span class="at">fill =</span> <span class="st">"springgreen4"</span>, <span class="at">limits =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_jitter</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">colour =</span> shoTypeT),</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>                <span class="at">width =</span> <span class="dv">1</span>, <span class="at">height =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_pitch</span>() <span class="sc">+</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"springgreen4"</span>)) <span class="sc">+</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_flip</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">49</span>, <span class="dv">101</span>)) <span class="sc">+</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_reverse</span>() <span class="sc">+</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_discrete</span>(<span class="at">drop =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(player_name, <span class="fu">paste0</span>(<span class="st">"Number of goals: "</span>, n)) <span class="sc">+</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">panel.border  =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">size =</span> <span class="dv">3</span>),</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>          <span class="at">plot.title    =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>plot1 <span class="ot">&lt;-</span> <span class="fu">map_shot</span>(mbappe,  <span class="st">"Kylian Mbappé"</span>)  <span class="sc">+</span> <span class="fu">guides</span>(<span class="at">colour =</span> <span class="st">"none"</span>)</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>plot2 <span class="ot">&lt;-</span> <span class="fu">map_shot</span>(rodri,   <span class="st">"Rodri"</span>)          <span class="sc">+</span> <span class="fu">guides</span>(<span class="at">colour =</span> <span class="st">"none"</span>)</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>plot3 <span class="ot">&lt;-</span> <span class="fu">map_shot</span>(kane,    <span class="st">"Harry Kane"</span>)     <span class="sc">+</span> <span class="fu">guides</span>(<span class="at">colour =</span> <span class="st">"none"</span>)</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>plot4 <span class="ot">&lt;-</span> <span class="fu">map_shot</span>(haaland, <span class="st">"Erling Haaland"</span>)</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>plot1 <span class="sc">+</span> plot2 <span class="sc">+</span> plot3 <span class="sc">+</span> plot4 <span class="sc">+</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">"collect"</span>) <span class="sc">+</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(</span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">title    =</span> <span class="st">"Goal positions — Top 4 players"</span>,</span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Season 2023/2024"</span>,</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption  =</span> <span class="st">"Source: understat.com via worldfootballR"</span></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The interactive version below lets you hover over each goal to see the xG value, shot type, assist provider, and match details.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show interactive version</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>map_shot_v <span class="ot">&lt;-</span> <span class="cf">function</span>(data, player_name) {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">x =</span> X <span class="sc">*</span> <span class="dv">100</span>, <span class="at">y =</span> Y <span class="sc">*</span> <span class="dv">100</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">xG2    =</span> <span class="fu">round</span>(xG, <span class="dv">2</span>),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">match_ =</span> <span class="fu">paste0</span>(home_team, <span class="st">" - "</span>, away_team))</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(data)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data) <span class="sc">+</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotate_pitch</span>(<span class="at">colour =</span> <span class="st">"white"</span>, <span class="at">fill =</span> <span class="st">"springgreen4"</span>, <span class="at">limits =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">label1 =</span> xG2, <span class="at">label2 =</span> shotType,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                   <span class="at">label3 =</span> player_assisted, <span class="at">label4 =</span> match_),</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>               <span class="at">size =</span> <span class="dv">2</span>, <span class="at">colour =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_pitch</span>() <span class="sc">+</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"springgreen4"</span>)) <span class="sc">+</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_flip</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">49</span>, <span class="dv">101</span>)) <span class="sc">+</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_reverse</span>() <span class="sc">+</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="fu">paste0</span>(player_name, <span class="st">" — Goals 2023/2024"</span>))</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplotly</span>(p, <span class="at">tooltip =</span> <span class="fu">c</span>(<span class="st">"label1"</span>, <span class="st">"label2"</span>, <span class="st">"label3"</span>, <span class="st">"label4"</span>))</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="fu">map_shot_v</span>(kane, <span class="st">"Harry Kane"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<blockquote class="blockquote">
+<p><strong>Key insight</strong> : Haaland scores almost exclusively inside the box — a pure penalty-area striker. Mbappé shows a wider spread, reflecting his ability to create and finish from various positions.</p>
+</blockquote>
+<hr>
+</section>
+<section id="part-3-transfer-market-values" class="level2">
+<h2 class="anchored" data-anchor-id="part-3-transfer-market-values">Part 3 — Transfer market values</h2>
+<p>Using Transfermarkt data, we track how each player’s market value has evolved over their career.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show transfer value code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>haaland <span class="ot">&lt;-</span> <span class="fu">tm_player_transfer_history</span>(<span class="st">"https://www.transfermarkt.com/erling-haaland/profil/spieler/418560"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>mbappe  <span class="ot">&lt;-</span> <span class="fu">tm_player_transfer_history</span>(<span class="st">"https://www.transfermarkt.com/kylian-mbappe/profil/spieler/342229"</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>kane    <span class="ot">&lt;-</span> <span class="fu">tm_player_transfer_history</span>(<span class="st">"https://www.transfermarkt.com/harry-kane/profil/spieler/132098"</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>rodri   <span class="ot">&lt;-</span> <span class="fu">tm_player_transfer_history</span>(<span class="st">"https://www.transfermarkt.com/rodri/profil/spieler/357565"</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>kane_2    <span class="ot">&lt;-</span> kane    <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="fu">complete.cases</span>(<span class="fu">pick</span>(transfer_date, market_value)))</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>rodri_2   <span class="ot">&lt;-</span> rodri   <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="fu">complete.cases</span>(<span class="fu">pick</span>(transfer_date, market_value)))</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>haaland_2 <span class="ot">&lt;-</span> haaland <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="fu">complete.cases</span>(<span class="fu">pick</span>(transfer_date, market_value)))</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>mbappe_2  <span class="ot">&lt;-</span> mbappe  <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="fu">complete.cases</span>(<span class="fu">pick</span>(transfer_date, market_value)))</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>the_four <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(haaland_2, mbappe_2, kane_2, rodri_2)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(the_four, <span class="fu">aes</span>(<span class="at">x =</span> transfer_date, <span class="at">y =</span> market_value, <span class="at">color =</span> player_name)) <span class="sc">+</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">label1 =</span> team_to, <span class="at">label2 =</span> market_value)) <span class="sc">+</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Date"</span>, <span class="at">y =</span> <span class="st">"Market Value"</span>,</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">title  =</span> <span class="st">"Top 4 — Transfer Market Value History"</span>,</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">colour =</span> <span class="st">"Player"</span>) </span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplotly</span>(p, <span class="at">tooltip =</span> <span class="fu">c</span>(<span class="st">"label1"</span>, <span class="st">"label2"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<blockquote class="blockquote">
+<p><strong>Key insight</strong> : Mbappé’s value peaked earliest and highest — a reflection of his extraordinary rise at Monaco and PSG. Haaland’s curve is the steepest, driven by his Bundesliga and Premier League performances.</p>
+</blockquote>
+<hr>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>With just a few lines of R and <code>worldfootballR</code>, we connected to 3 different data sources and built a complete multi-dimensional player analysis :</p>
+<ul>
+<li><strong>Who are they</strong> as players ? → Radar charts</li>
+<li><strong>How do they score</strong> ? → Shot maps<br>
+</li>
+<li><strong>What is their value</strong> ? → Transfer history</li>
+</ul>
+</section>
+<section id="source-code" class="level2">
+<h2 class="anchored" data-anchor-id="source-code">Source code</h2>
+<p>Full code available on <a href="https://github.com/FlipR-data/worldFootballR">GitHub</a>.</p>
 
 
 <!-- -->
@@ -681,46 +919,260 @@ ligue1 |&gt;
     }
   });
   </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb2" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "World Football R"</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Analysis of European football statistics with R"</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span><span class="co"> [R, Sport, ggplot2]</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> 2026-04-25</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">## Overview</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>Analysis of European football leagues using the <span class="in">`worldfootballR`</span> package. Data covers top 5 leagues — Premier League, Ligue 1, Bundesliga, Serie A, La Liga.</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="fu">## Load data</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>​<span class="sc">\`\`\`</span>{r} #<span class="sc">\|</span> message: false #<span class="sc">\|</span> warning: false</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>library(tidyverse) library(worldfootballR)</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="fu"># Example : top scorers Ligue 1 2024</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>ligue1 <span class="sc">\&lt;</span>- fb_league_stats( country = "FRA", gender = "M", season_end_year = 2024, tier = "1st", stat_type = "shooting" )</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="in">```         </span></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="in">## Visualisation</span></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="in">​```{r}</span></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="in">#| fig-width: 10</span></span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="in">#| fig-height: 6</span></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="in">ligue1 |&gt;</span></span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="in">  slice_max(Gls, n = 15) |&gt;</span></span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="in">  ggplot(aes(x = reorder(Player, Gls), y = Gls)) +</span></span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_col(fill = "#0F6E56") +</span></span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="in">  coord_flip() +</span></span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="in">  labs(</span></span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="in">    title = "Top 15 scorers — Ligue 1 2024",</span></span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="in">    x = NULL, y = "Goals"</span></span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="in">  ) +</span></span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="in">  theme_minimal()</span></span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "World Football R"</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Scouting, shot maps &amp; transfer values with worldfootballR"</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span><span class="co"> [R, Sport, ggplot2, worldfootballR]</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> 2026-04-25</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">## Overview</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>This analysis showcases the power of the <span class="in">`worldfootballR`</span> package — a single R package that connects to **three major football data sources** to build a complete player analysis.</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>We focus on the top 4 players of the 2023 season : Kane, Mbappé, Haaland and Rodri.</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Source <span class="pp">|</span> Data <span class="pp">|</span> Function <span class="pp">|</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="pp">|------------------------|------------------------|------------------------|</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> FBref <span class="pp">|</span> Scouting reports (per 90 stats) <span class="pp">|</span> <span class="in">`fb_player_scouting_report()`</span> <span class="pp">|</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Understat <span class="pp">|</span> Shot locations &amp; xG <span class="pp">|</span> <span class="in">`understat_player_shots()`</span> <span class="pp">|</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Transfermarkt <span class="pp">|</span> Transfer &amp; market values <span class="pp">|</span> <span class="in">`tm_player_transfer_history()`</span> <span class="pp">|</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="fu">## Setup</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(worldfootballR)</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fmsb)</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggsoccer)</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggtext)</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotly)</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a><span class="fu">## Part 1 — Player profiles : Radar charts</span></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>Using FBref scouting reports, we compare 11 key metrics per 90 minutes across the Big 5 leagues.</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: "Show radar chart code"</span></span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>data_player <span class="ot">&lt;-</span> <span class="cf">function</span>(url) {</span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>  player_data <span class="ot">&lt;-</span> <span class="fu">fb_player_scouting_report</span>(</span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>    url, <span class="st">"primary"</span>, <span class="at">time_pause =</span> <span class="dv">3</span>,</span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>    <span class="at">league_comp_name =</span> <span class="st">"Last 365 Days Men's Big 5 Leagues, UCL, UEL"</span></span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>  parameters <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Goals"</span>, <span class="st">"xG: Expected Goals"</span>, <span class="st">"Pass Completion %"</span>, <span class="st">"Key Passes"</span>,</span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Assists"</span>, <span class="st">"Touches"</span>, <span class="st">"Successful Take-Ons"</span>, <span class="st">"Tackles"</span>,</span>
+<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a>    <span class="st">"GCA (Defensive Action)"</span>, <span class="st">"Blocks"</span>, <span class="st">"Clearances"</span></span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>  max_min <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a>    <span class="at">Goals =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>), <span class="st">`</span><span class="at">xG: Expected Goals</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Pass Completion %</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">0</span>), <span class="at">Assists =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Key Passes</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">0</span>), <span class="st">`</span><span class="at">GCA (Defensive Action)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="dv">0</span>),</span>
+<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a>    <span class="at">Tackles =</span> <span class="fu">c</span>(<span class="dv">40</span>, <span class="dv">0</span>), <span class="at">Blocks =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>), <span class="at">Clearances =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">0</span>),</span>
+<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a>    <span class="at">Touches =</span> <span class="fu">c</span>(<span class="dv">300</span>, <span class="dv">0</span>), <span class="st">`</span><span class="at">Successful Take-Ons</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">0</span>)</span>
+<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>  study_player <span class="ot">&lt;&lt;-</span> player_data <span class="sc">|&gt;</span></span>
+<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(Statistic <span class="sc">%in%</span> parameters) <span class="sc">|&gt;</span></span>
+<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(StatGroup <span class="sc">!=</span> <span class="st">"Standard"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(Statistic, Per90) <span class="sc">|&gt;</span></span>
+<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> Statistic, <span class="at">values_from =</span> Per90)</span>
+<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a>  name_player    <span class="ot">&lt;-</span> <span class="fu">paste0</span>(player_data[<span class="dv">1</span>, <span class="st">"Player"</span>], <span class="st">" ("</span>, player_data[<span class="dv">1</span>, <span class="st">"Versus"</span>], <span class="st">")"</span>)</span>
+<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(max_min) <span class="ot">&lt;-</span> <span class="fu">names</span>(study_player)</span>
+<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a>  df             <span class="ot">&lt;-</span> <span class="fu">rbind</span>(max_min, study_player)</span>
+<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames</span>(df)   <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"max"</span>, <span class="st">"min"</span>, name_player)</span>
+<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(df)      <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Goals"</span>, <span class="st">"Exp. Goal"</span>, <span class="st">"Pass completion"</span>, <span class="st">"Assist"</span>,</span>
+<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"Key Pass"</span>, <span class="st">"GCA (Defensive)"</span>, <span class="st">"Tackles"</span>, <span class="st">"Blocks"</span>,</span>
+<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"Clearance"</span>, <span class="st">"Touches"</span>, <span class="st">"Successful Take-Ons"</span>)</span>
+<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a>  colors_border <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rgb</span>(<span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>), <span class="fu">rgb</span>(<span class="fl">0.8</span>, <span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>))</span>
+<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a>  colors_in     <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rgb</span>(<span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.4</span>), <span class="fu">rgb</span>(<span class="fl">0.8</span>, <span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">0.4</span>))</span>
+<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a>  <span class="fu">radarchart</span>(df, <span class="at">axistype =</span> <span class="dv">1</span>,</span>
+<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a>    <span class="at">pcol =</span> colors_border, <span class="at">pfcol =</span> colors_in, <span class="at">plwd =</span> <span class="dv">4</span>, <span class="at">plty =</span> <span class="dv">1</span>,</span>
+<span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a>    <span class="at">cglcol =</span> <span class="st">"grey"</span>, <span class="at">cglty =</span> <span class="dv">1</span>, <span class="at">axislabcol =</span> <span class="st">"grey"</span>,</span>
+<span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a>    <span class="at">caxislabels =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.2</span>), <span class="at">cglwd =</span> <span class="dv">1</span>, <span class="at">vlcex =</span> <span class="fl">0.8</span></span>
+<span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a>  <span class="fu">legend</span>(<span class="at">x =</span> <span class="sc">-</span><span class="fl">0.8</span>, <span class="at">y =</span> <span class="sc">-</span><span class="fl">1.2</span>,</span>
+<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend =</span> <span class="fu">rownames</span>(df[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), ]),</span>
+<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a>    <span class="at">bty =</span> <span class="st">"n"</span>, <span class="at">pch =</span> <span class="dv">10</span>, <span class="at">col =</span> colors_in,</span>
+<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a>    <span class="at">text.col =</span> <span class="st">"grey"</span>, <span class="at">cex =</span> <span class="dv">1</span>, <span class="at">pt.cex =</span> <span class="dv">3</span></span>
+<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-101"><a href="#cb6-101" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>), <span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">mgp =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="at">xpd =</span> <span class="cn">NA</span>)</span>
+<span id="cb6-102"><a href="#cb6-102" aria-hidden="true" tabindex="-1"></a><span class="fu">data_player</span>(<span class="st">"https://fbref.com/en/players/21a66f6a/Harry-Kane"</span>)</span>
+<span id="cb6-103"><a href="#cb6-103" aria-hidden="true" tabindex="-1"></a><span class="fu">data_player</span>(<span class="st">"https://fbref.com/en/players/42fd9c7f/Kylian-Mbappe"</span>)</span>
+<span id="cb6-104"><a href="#cb6-104" aria-hidden="true" tabindex="-1"></a><span class="fu">data_player</span>(<span class="st">"https://fbref.com/en/players/1f44ac21/Erling-Haaland"</span>)</span>
+<span id="cb6-105"><a href="#cb6-105" aria-hidden="true" tabindex="-1"></a><span class="fu">data_player</span>(<span class="st">"https://fbref.com/en/players/6434f10d/Rodri"</span>)</span>
+<span id="cb6-106"><a href="#cb6-106" aria-hidden="true" tabindex="-1"></a><span class="fu">mtext</span>(<span class="st">"Top 4 Players 2023"</span>, <span class="at">side =</span> <span class="dv">3</span>, <span class="at">line =</span> <span class="sc">-</span><span class="fl">1.3</span>,</span>
+<span id="cb6-107"><a href="#cb6-107" aria-hidden="true" tabindex="-1"></a>      <span class="at">outer =</span> <span class="cn">TRUE</span>, <span class="at">cex =</span> <span class="fl">1.5</span>, <span class="at">font =</span> <span class="dv">4</span>, <span class="at">col =</span> <span class="st">"#0F6E56"</span>)</span>
+<span id="cb6-108"><a href="#cb6-108" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-109"><a href="#cb6-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-110"><a href="#cb6-110" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; **Key insight** : Rodri's radar looks completely different from the other three — dominant on defensive actions and passing, minimal on goals. This perfectly illustrates how a defensive midfielder compares to attackers.</span></span>
+<span id="cb6-111"><a href="#cb6-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-112"><a href="#cb6-112" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb6-113"><a href="#cb6-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-114"><a href="#cb6-114" aria-hidden="true" tabindex="-1"></a><span class="fu">## Part 2 — Shot maps : Where do they score ?</span></span>
+<span id="cb6-115"><a href="#cb6-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-116"><a href="#cb6-116" aria-hidden="true" tabindex="-1"></a>Using Understat data, we plot the exact location of every goal scored in the 2023/24 season, with shot type (foot/head) as colour.</span>
+<span id="cb6-117"><a href="#cb6-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-120"><a href="#cb6-120" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb6-121"><a href="#cb6-121" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb6-122"><a href="#cb6-122" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
+<span id="cb6-123"><a href="#cb6-123" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: "Show shot map code"</span></span>
+<span id="cb6-124"><a href="#cb6-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-125"><a href="#cb6-125" aria-hidden="true" tabindex="-1"></a>mbappe  <span class="ot">&lt;-</span> <span class="fu">understat_player_shots</span>(<span class="st">"https://understat.com/player/3423"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-126"><a href="#cb6-126" aria-hidden="true" tabindex="-1"></a>           <span class="fu">filter</span>(season <span class="sc">==</span> <span class="dv">2023</span>, result <span class="sc">==</span> <span class="st">"Goal"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-127"><a href="#cb6-127" aria-hidden="true" tabindex="-1"></a>           <span class="fu">mutate</span>(<span class="at">shotType =</span> <span class="fu">as.factor</span>(shotType))</span>
+<span id="cb6-128"><a href="#cb6-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-129"><a href="#cb6-129" aria-hidden="true" tabindex="-1"></a>rodri   <span class="ot">&lt;-</span> <span class="fu">understat_player_shots</span>(<span class="st">"https://understat.com/player/2496"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-130"><a href="#cb6-130" aria-hidden="true" tabindex="-1"></a>           <span class="fu">filter</span>(season <span class="sc">==</span> <span class="dv">2023</span>, result <span class="sc">==</span> <span class="st">"Goal"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-131"><a href="#cb6-131" aria-hidden="true" tabindex="-1"></a>           <span class="fu">mutate</span>(<span class="at">shotType =</span> <span class="fu">as.factor</span>(shotType))</span>
+<span id="cb6-132"><a href="#cb6-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-133"><a href="#cb6-133" aria-hidden="true" tabindex="-1"></a>kane    <span class="ot">&lt;-</span> <span class="fu">understat_player_shots</span>(<span class="st">"https://understat.com/player/647"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-134"><a href="#cb6-134" aria-hidden="true" tabindex="-1"></a>           <span class="fu">filter</span>(season <span class="sc">==</span> <span class="dv">2023</span>, result <span class="sc">==</span> <span class="st">"Goal"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-135"><a href="#cb6-135" aria-hidden="true" tabindex="-1"></a>           <span class="fu">mutate</span>(<span class="at">shotType =</span> <span class="fu">as.factor</span>(shotType))</span>
+<span id="cb6-136"><a href="#cb6-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-137"><a href="#cb6-137" aria-hidden="true" tabindex="-1"></a>haaland <span class="ot">&lt;-</span> <span class="fu">understat_player_shots</span>(<span class="st">"https://understat.com/player/8260"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-138"><a href="#cb6-138" aria-hidden="true" tabindex="-1"></a>           <span class="fu">filter</span>(season <span class="sc">==</span> <span class="dv">2023</span>, result <span class="sc">==</span> <span class="st">"Goal"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-139"><a href="#cb6-139" aria-hidden="true" tabindex="-1"></a>           <span class="fu">mutate</span>(<span class="at">shotType =</span> <span class="fu">as.factor</span>(shotType))</span>
+<span id="cb6-140"><a href="#cb6-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-141"><a href="#cb6-141" aria-hidden="true" tabindex="-1"></a>shotType_levels <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Head"</span>, <span class="st">"LeftFoot"</span>, <span class="st">"OtherBodyPart"</span>, <span class="st">"RightFoot"</span>)</span>
+<span id="cb6-142"><a href="#cb6-142" aria-hidden="true" tabindex="-1"></a>mbappe<span class="sc">$</span>shoTypeT  <span class="ot">&lt;-</span> <span class="fu">factor</span>(mbappe<span class="sc">$</span>shotType,  <span class="at">levels =</span> shotType_levels)</span>
+<span id="cb6-143"><a href="#cb6-143" aria-hidden="true" tabindex="-1"></a>rodri<span class="sc">$</span>shoTypeT   <span class="ot">&lt;-</span> <span class="fu">factor</span>(rodri<span class="sc">$</span>shotType,   <span class="at">levels =</span> shotType_levels)</span>
+<span id="cb6-144"><a href="#cb6-144" aria-hidden="true" tabindex="-1"></a>kane<span class="sc">$</span>shoTypeT    <span class="ot">&lt;-</span> <span class="fu">factor</span>(kane<span class="sc">$</span>shotType,    <span class="at">levels =</span> shotType_levels)</span>
+<span id="cb6-145"><a href="#cb6-145" aria-hidden="true" tabindex="-1"></a>haaland<span class="sc">$</span>shoTypeT <span class="ot">&lt;-</span> <span class="fu">factor</span>(haaland<span class="sc">$</span>shotType, <span class="at">levels =</span> shotType_levels)</span>
+<span id="cb6-146"><a href="#cb6-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-147"><a href="#cb6-147" aria-hidden="true" tabindex="-1"></a>map_shot <span class="ot">&lt;-</span> <span class="cf">function</span>(data, player_name) {</span>
+<span id="cb6-148"><a href="#cb6-148" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">x =</span> X <span class="sc">*</span> <span class="dv">100</span>, <span class="at">y =</span> Y <span class="sc">*</span> <span class="dv">100</span>)</span>
+<span id="cb6-149"><a href="#cb6-149" aria-hidden="true" tabindex="-1"></a>  n    <span class="ot">&lt;-</span> <span class="fu">nrow</span>(data)</span>
+<span id="cb6-150"><a href="#cb6-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-151"><a href="#cb6-151" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(data) <span class="sc">+</span></span>
+<span id="cb6-152"><a href="#cb6-152" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotate_pitch</span>(<span class="at">colour =</span> <span class="st">"white"</span>, <span class="at">fill =</span> <span class="st">"springgreen4"</span>, <span class="at">limits =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb6-153"><a href="#cb6-153" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_jitter</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">colour =</span> shoTypeT),</span>
+<span id="cb6-154"><a href="#cb6-154" aria-hidden="true" tabindex="-1"></a>                <span class="at">width =</span> <span class="dv">1</span>, <span class="at">height =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb6-155"><a href="#cb6-155" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_pitch</span>() <span class="sc">+</span></span>
+<span id="cb6-156"><a href="#cb6-156" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"springgreen4"</span>)) <span class="sc">+</span></span>
+<span id="cb6-157"><a href="#cb6-157" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_flip</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">49</span>, <span class="dv">101</span>)) <span class="sc">+</span></span>
+<span id="cb6-158"><a href="#cb6-158" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_reverse</span>() <span class="sc">+</span></span>
+<span id="cb6-159"><a href="#cb6-159" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_discrete</span>(<span class="at">drop =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb6-160"><a href="#cb6-160" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(player_name, <span class="fu">paste0</span>(<span class="st">"Number of goals: "</span>, n)) <span class="sc">+</span></span>
+<span id="cb6-161"><a href="#cb6-161" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">panel.border  =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">size =</span> <span class="dv">3</span>),</span>
+<span id="cb6-162"><a href="#cb6-162" aria-hidden="true" tabindex="-1"></a>          <span class="at">plot.title    =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb6-163"><a href="#cb6-163" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-164"><a href="#cb6-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-165"><a href="#cb6-165" aria-hidden="true" tabindex="-1"></a>plot1 <span class="ot">&lt;-</span> <span class="fu">map_shot</span>(mbappe,  <span class="st">"Kylian Mbappé"</span>)  <span class="sc">+</span> <span class="fu">guides</span>(<span class="at">colour =</span> <span class="st">"none"</span>)</span>
+<span id="cb6-166"><a href="#cb6-166" aria-hidden="true" tabindex="-1"></a>plot2 <span class="ot">&lt;-</span> <span class="fu">map_shot</span>(rodri,   <span class="st">"Rodri"</span>)          <span class="sc">+</span> <span class="fu">guides</span>(<span class="at">colour =</span> <span class="st">"none"</span>)</span>
+<span id="cb6-167"><a href="#cb6-167" aria-hidden="true" tabindex="-1"></a>plot3 <span class="ot">&lt;-</span> <span class="fu">map_shot</span>(kane,    <span class="st">"Harry Kane"</span>)     <span class="sc">+</span> <span class="fu">guides</span>(<span class="at">colour =</span> <span class="st">"none"</span>)</span>
+<span id="cb6-168"><a href="#cb6-168" aria-hidden="true" tabindex="-1"></a>plot4 <span class="ot">&lt;-</span> <span class="fu">map_shot</span>(haaland, <span class="st">"Erling Haaland"</span>)</span>
+<span id="cb6-169"><a href="#cb6-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-170"><a href="#cb6-170" aria-hidden="true" tabindex="-1"></a>plot1 <span class="sc">+</span> plot2 <span class="sc">+</span> plot3 <span class="sc">+</span> plot4 <span class="sc">+</span></span>
+<span id="cb6-171"><a href="#cb6-171" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">"collect"</span>) <span class="sc">+</span></span>
+<span id="cb6-172"><a href="#cb6-172" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(</span>
+<span id="cb6-173"><a href="#cb6-173" aria-hidden="true" tabindex="-1"></a>    <span class="at">title    =</span> <span class="st">"Goal positions — Top 4 players"</span>,</span>
+<span id="cb6-174"><a href="#cb6-174" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Season 2023/2024"</span>,</span>
+<span id="cb6-175"><a href="#cb6-175" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption  =</span> <span class="st">"Source: understat.com via worldfootballR"</span></span>
+<span id="cb6-176"><a href="#cb6-176" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-177"><a href="#cb6-177" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-178"><a href="#cb6-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-179"><a href="#cb6-179" aria-hidden="true" tabindex="-1"></a>The interactive version below lets you hover over each goal to see the xG value, shot type, assist provider, and match details.</span>
+<span id="cb6-180"><a href="#cb6-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-183"><a href="#cb6-183" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb6-184"><a href="#cb6-184" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb6-185"><a href="#cb6-185" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
+<span id="cb6-186"><a href="#cb6-186" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: "Show interactive version"</span></span>
+<span id="cb6-187"><a href="#cb6-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-188"><a href="#cb6-188" aria-hidden="true" tabindex="-1"></a>map_shot_v <span class="ot">&lt;-</span> <span class="cf">function</span>(data, player_name) {</span>
+<span id="cb6-189"><a href="#cb6-189" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
+<span id="cb6-190"><a href="#cb6-190" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">x =</span> X <span class="sc">*</span> <span class="dv">100</span>, <span class="at">y =</span> Y <span class="sc">*</span> <span class="dv">100</span>,</span>
+<span id="cb6-191"><a href="#cb6-191" aria-hidden="true" tabindex="-1"></a>           <span class="at">xG2    =</span> <span class="fu">round</span>(xG, <span class="dv">2</span>),</span>
+<span id="cb6-192"><a href="#cb6-192" aria-hidden="true" tabindex="-1"></a>           <span class="at">match_ =</span> <span class="fu">paste0</span>(home_team, <span class="st">" - "</span>, away_team))</span>
+<span id="cb6-193"><a href="#cb6-193" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(data)</span>
+<span id="cb6-194"><a href="#cb6-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-195"><a href="#cb6-195" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data) <span class="sc">+</span></span>
+<span id="cb6-196"><a href="#cb6-196" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotate_pitch</span>(<span class="at">colour =</span> <span class="st">"white"</span>, <span class="at">fill =</span> <span class="st">"springgreen4"</span>, <span class="at">limits =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb6-197"><a href="#cb6-197" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">label1 =</span> xG2, <span class="at">label2 =</span> shotType,</span>
+<span id="cb6-198"><a href="#cb6-198" aria-hidden="true" tabindex="-1"></a>                   <span class="at">label3 =</span> player_assisted, <span class="at">label4 =</span> match_),</span>
+<span id="cb6-199"><a href="#cb6-199" aria-hidden="true" tabindex="-1"></a>               <span class="at">size =</span> <span class="dv">2</span>, <span class="at">colour =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb6-200"><a href="#cb6-200" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_pitch</span>() <span class="sc">+</span></span>
+<span id="cb6-201"><a href="#cb6-201" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"springgreen4"</span>)) <span class="sc">+</span></span>
+<span id="cb6-202"><a href="#cb6-202" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_flip</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">49</span>, <span class="dv">101</span>)) <span class="sc">+</span></span>
+<span id="cb6-203"><a href="#cb6-203" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_reverse</span>() <span class="sc">+</span></span>
+<span id="cb6-204"><a href="#cb6-204" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="fu">paste0</span>(player_name, <span class="st">" — Goals 2023/2024"</span>))</span>
+<span id="cb6-205"><a href="#cb6-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-206"><a href="#cb6-206" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplotly</span>(p, <span class="at">tooltip =</span> <span class="fu">c</span>(<span class="st">"label1"</span>, <span class="st">"label2"</span>, <span class="st">"label3"</span>, <span class="st">"label4"</span>))</span>
+<span id="cb6-207"><a href="#cb6-207" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-208"><a href="#cb6-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-209"><a href="#cb6-209" aria-hidden="true" tabindex="-1"></a><span class="fu">map_shot_v</span>(kane, <span class="st">"Harry Kane"</span>)</span>
+<span id="cb6-210"><a href="#cb6-210" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-211"><a href="#cb6-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-212"><a href="#cb6-212" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; **Key insight** : Haaland scores almost exclusively inside the box — a pure penalty-area striker. Mbappé shows a wider spread, reflecting his ability to create and finish from various positions.</span></span>
+<span id="cb6-213"><a href="#cb6-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-214"><a href="#cb6-214" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb6-215"><a href="#cb6-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-216"><a href="#cb6-216" aria-hidden="true" tabindex="-1"></a><span class="fu">## Part 3 — Transfer market values</span></span>
+<span id="cb6-217"><a href="#cb6-217" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-218"><a href="#cb6-218" aria-hidden="true" tabindex="-1"></a>Using Transfermarkt data, we track how each player's market value has evolved over their career.</span>
+<span id="cb6-219"><a href="#cb6-219" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-222"><a href="#cb6-222" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb6-223"><a href="#cb6-223" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb6-224"><a href="#cb6-224" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
+<span id="cb6-225"><a href="#cb6-225" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: "Show transfer value code"</span></span>
+<span id="cb6-226"><a href="#cb6-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-227"><a href="#cb6-227" aria-hidden="true" tabindex="-1"></a>haaland <span class="ot">&lt;-</span> <span class="fu">tm_player_transfer_history</span>(<span class="st">"https://www.transfermarkt.com/erling-haaland/profil/spieler/418560"</span>)</span>
+<span id="cb6-228"><a href="#cb6-228" aria-hidden="true" tabindex="-1"></a>mbappe  <span class="ot">&lt;-</span> <span class="fu">tm_player_transfer_history</span>(<span class="st">"https://www.transfermarkt.com/kylian-mbappe/profil/spieler/342229"</span>)</span>
+<span id="cb6-229"><a href="#cb6-229" aria-hidden="true" tabindex="-1"></a>kane    <span class="ot">&lt;-</span> <span class="fu">tm_player_transfer_history</span>(<span class="st">"https://www.transfermarkt.com/harry-kane/profil/spieler/132098"</span>)</span>
+<span id="cb6-230"><a href="#cb6-230" aria-hidden="true" tabindex="-1"></a>rodri   <span class="ot">&lt;-</span> <span class="fu">tm_player_transfer_history</span>(<span class="st">"https://www.transfermarkt.com/rodri/profil/spieler/357565"</span>)</span>
+<span id="cb6-231"><a href="#cb6-231" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-232"><a href="#cb6-232" aria-hidden="true" tabindex="-1"></a>kane_2    <span class="ot">&lt;-</span> kane    <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="fu">complete.cases</span>(<span class="fu">pick</span>(transfer_date, market_value)))</span>
+<span id="cb6-233"><a href="#cb6-233" aria-hidden="true" tabindex="-1"></a>rodri_2   <span class="ot">&lt;-</span> rodri   <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="fu">complete.cases</span>(<span class="fu">pick</span>(transfer_date, market_value)))</span>
+<span id="cb6-234"><a href="#cb6-234" aria-hidden="true" tabindex="-1"></a>haaland_2 <span class="ot">&lt;-</span> haaland <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="fu">complete.cases</span>(<span class="fu">pick</span>(transfer_date, market_value)))</span>
+<span id="cb6-235"><a href="#cb6-235" aria-hidden="true" tabindex="-1"></a>mbappe_2  <span class="ot">&lt;-</span> mbappe  <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="fu">complete.cases</span>(<span class="fu">pick</span>(transfer_date, market_value)))</span>
+<span id="cb6-236"><a href="#cb6-236" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-237"><a href="#cb6-237" aria-hidden="true" tabindex="-1"></a>the_four <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(haaland_2, mbappe_2, kane_2, rodri_2)</span>
+<span id="cb6-238"><a href="#cb6-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-239"><a href="#cb6-239" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(the_four, <span class="fu">aes</span>(<span class="at">x =</span> transfer_date, <span class="at">y =</span> market_value, <span class="at">color =</span> player_name)) <span class="sc">+</span></span>
+<span id="cb6-240"><a href="#cb6-240" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb6-241"><a href="#cb6-241" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">label1 =</span> team_to, <span class="at">label2 =</span> market_value)) <span class="sc">+</span></span>
+<span id="cb6-242"><a href="#cb6-242" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Date"</span>, <span class="at">y =</span> <span class="st">"Market Value"</span>,</span>
+<span id="cb6-243"><a href="#cb6-243" aria-hidden="true" tabindex="-1"></a>       <span class="at">title  =</span> <span class="st">"Top 4 — Transfer Market Value History"</span>,</span>
+<span id="cb6-244"><a href="#cb6-244" aria-hidden="true" tabindex="-1"></a>       <span class="at">colour =</span> <span class="st">"Player"</span>) </span>
+<span id="cb6-245"><a href="#cb6-245" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-246"><a href="#cb6-246" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplotly</span>(p, <span class="at">tooltip =</span> <span class="fu">c</span>(<span class="st">"label1"</span>, <span class="st">"label2"</span>))</span>
+<span id="cb6-247"><a href="#cb6-247" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-248"><a href="#cb6-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-249"><a href="#cb6-249" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; **Key insight** : Mbappé's value peaked earliest and highest — a reflection of his extraordinary rise at Monaco and PSG. Haaland's curve is the steepest, driven by his Bundesliga and Premier League performances.</span></span>
+<span id="cb6-250"><a href="#cb6-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-251"><a href="#cb6-251" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb6-252"><a href="#cb6-252" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-253"><a href="#cb6-253" aria-hidden="true" tabindex="-1"></a><span class="fu">## Conclusion</span></span>
+<span id="cb6-254"><a href="#cb6-254" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-255"><a href="#cb6-255" aria-hidden="true" tabindex="-1"></a>With just a few lines of R and <span class="in">`worldfootballR`</span>, we connected to 3 different data sources and built a complete multi-dimensional player analysis :</span>
+<span id="cb6-256"><a href="#cb6-256" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-257"><a href="#cb6-257" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Who are they** as players ? → Radar charts</span>
+<span id="cb6-258"><a href="#cb6-258" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**How do they score** ? → Shot maps\</span>
+<span id="cb6-259"><a href="#cb6-259" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**What is their value** ? → Transfer history</span>
+<span id="cb6-260"><a href="#cb6-260" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-261"><a href="#cb6-261" aria-hidden="true" tabindex="-1"></a><span class="fu">## Source code</span></span>
+<span id="cb6-262"><a href="#cb6-262" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-263"><a href="#cb6-263" aria-hidden="true" tabindex="-1"></a>Full code available on <span class="co">[</span><span class="ot">GitHub</span><span class="co">](https://github.com/FlipR-data/worldFootballR)</span>.</span>
+</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

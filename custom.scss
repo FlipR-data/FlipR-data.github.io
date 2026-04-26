@@ -25,34 +25,74 @@ code {
   padding: 1px 5px;
 }
 
-.card {
-  border: 0.5px solid #D3D1C7;
-  border-radius: 12px;
-  transition: border-color 0.2s;
-  &:hover { border-color: $primary; }
-}
-
-
-
 .hero {
   text-align: center;
-  padding: 60px 32px 40px;
+  padding: 80px 32px 60px;
   border-bottom: 0.5px solid #D3D1C7;
+  
+  h1 {
+    font-size: 3rem;
+    margin-bottom: 8px;
+  }
+  
+  h3 {
+    font-weight: 300;
+    color: #888780;
+    margin-bottom: 24px;
+  }
+  
+  p {
+    max-width: 520px;
+    margin: 0 auto 32px;
+    color: #5F5E5A;
+    line-height: 1.7;
+  }
+  
+  a {
+    color: $primary;
+    text-decoration: none;
+    font-weight: 500;
+    &:hover { text-decoration: underline; }
+  }
 }
 
 .project-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
-  padding: 40px 32px;
+  padding: 40px 0;
 }
 
 .project-card {
   border: 0.5px solid #D3D1C7;
   border-radius: 12px;
-  padding: 24px;
-  transition: border-color 0.2s;
-  &:hover { border-color: $primary; }
+  padding: 28px;
+  background: #FFFFFF;
+  transition: border-color 0.2s, transform 0.2s;
+  
+  &:hover {
+    border-color: $primary;
+    transform: translateY(-2px);
+  }
+  
+  h4 { margin-bottom: 8px; }
+  
+  a {
+    color: $primary;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+}
+
+.about-strip {
+  text-align: center;
+  padding: 28px;
+  background: #F1EFE8;
+  border-radius: 12px;
+  color: #5F5E5A;
+  font-size: 0.9rem;
+  margin: 8px 0 40px;
 }
 
 .about-hero {
