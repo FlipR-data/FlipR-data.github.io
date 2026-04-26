@@ -1,0 +1,17 @@
+---
+title: "Clinical Data Programming"
+subtitle: "CDISC · ADaM · TLFs · R Pharmaverse"
+categories: [R, Pharma, CDISC, Shiny]
+date: 2026-04-25
+---
+
+## Overview
+
+*Project coming soon — using CDISC pilot public dataset.*
+
+## Skills demonstrated
+
+-   ADaM dataset creation with `admiral`
+-   TLF generation with `rtables` / `gt`
+-   Safety reporting with `Teal` / `Shiny`
+-   CDISC SDTM & ADaM standards

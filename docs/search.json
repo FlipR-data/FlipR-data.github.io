@@ -187,5 +187,26 @@
     "title": "Portfolio Dashboard",
     "section": "Source code",
     "text": "Source code\nFull code available on GitHub."
+  },
+  {
+    "objectID": "projects/pharma/index.html",
+    "href": "projects/pharma/index.html",
+    "title": "Clinical Data Programming",
+    "section": "",
+    "text": "Project coming soon — using CDISC pilot public dataset."
+  },
+  {
+    "objectID": "projects/pharma/index.html#overview",
+    "href": "projects/pharma/index.html#overview",
+    "title": "Clinical Data Programming",
+    "section": "",
+    "text": "Project coming soon — using CDISC pilot public dataset."
+  },
+  {
+    "objectID": "projects/pharma/index.html#skills-demonstrated",
+    "href": "projects/pharma/index.html#skills-demonstrated",
+    "title": "Clinical Data Programming",
+    "section": "Skills demonstrated",
+    "text": "Skills demonstrated\n\nADaM dataset creation with admiral\nTLF generation with rtables / gt\nSafety reporting with Teal / Shiny\nCDISC SDTM & ADaM standards"
   }
 ]
