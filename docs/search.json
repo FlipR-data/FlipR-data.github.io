@@ -23,9 +23,9 @@
   {
     "objectID": "about.html",
     "href": "about.html",
-    "title": "About",
+    "title": "",
     "section": "",
-    "text": "Statistical programmer in the pharmaceutical industry. I work with R daily — CDISC standards, ADaM datasets, TLFs.\nOutside of pharma, I apply R to sports analytics and finance."
+    "text": "Code"
   },
   {
     "objectID": "about.html#who-am-i",
@@ -47,5 +47,47 @@
     "title": "",
     "section": "",
     "text": "Code\n\n\n\n\n\nFlipR-data\n\nStatistical Programmer · R · Shiny\n\n\n\n\n🏥 Pharma & Clinical\nAdverse Event Explorer\nInteractive Shiny dashboard for CDISC ADaM safety data exploration.\nShiny CDISC ADaM\nView project →\n\n\n⚽ Sport Analytics\nWorld Football R\nAnalysis and visualisation of football statistics across Europe’s top leagues.\nggplot2 worldfootballR tidyverse\nView project →\n\n\n📈 Finance\nPortfolio Risk Dashboard\nInteractive dashboard for portfolio returns and risk metrics.\nShiny quantmod tidyquant\nView project →"
+  },
+  {
+    "objectID": "about.html#summary",
+    "href": "about.html#summary",
+    "title": "",
+    "section": "Summary",
+    "text": "Summary\nSenior Statistical Programmer with 20+ years of expertise in clinical development. Proven track record as a Global Study Lead in Oncology (Phases I–III), delivering successful submission packages for FDA, EMA, and PMDA.\nCurrently bridging legacy SAS environments with modern Open Source — R/Pharmaverse and AI-driven automation — at Debiopharm."
+  },
+  {
+    "objectID": "about.html#experience",
+    "href": "about.html#experience",
+    "title": "",
+    "section": "Experience",
+    "text": "Experience\n\n\n\n\n\n\n\n\nPeriod\nCompany\nRole\n\n\n\n\n2025 – 2026\nDebiopharm · Lausanne\nSenior Statistical Programmer (Lead)\n\n\n2018 – 2024\nRoche · Basel\nGlobal Study Lead\n\n\n2017\nCytel · Geneva\nSenior Statistical Programmer (Lead)\n\n\n2014 – 2017\nIQVIA · UK/Remote\nLead Statistical Programmer\n\n\n2008 – 2014\nClinbay · France\nSenior Statistical Programmer (Lead)\n\n\n2006 – 2008\nNovartis · Basel\nStatistical Programmer\n\n\n2003 – 2005\nEli Lilly · Belgium\nStatistical Analyst"
+  },
+  {
+    "objectID": "about.html#core-skills",
+    "href": "about.html#core-skills",
+    "title": "",
+    "section": "Core Skills",
+    "text": "Core Skills\n\n\nClinical & Regulatory\n\nCDISC (SDTM & ADaM)\nFDA · EMA · PMDA submissions\nPinnacle 21 · Define.xml\nSDRG / ADRG\nMedDRA · WHODrug\n\n\n\nTechnical Stack\n\nR · tidyverse · admiral\nPharmaverse · Teal\nR Shiny\nSAS (Advanced Macro)\nGit / GitLab · SQL\n\n\n\nTherapeutic Areas\n\nOncology (Phase I–III)\nMultiple Sclerosis\nEpilepsy · Ophthalmology\nDiabetes · PK studies"
+  },
+  {
+    "objectID": "about.html#education",
+    "href": "about.html#education",
+    "title": "",
+    "section": "Education",
+    "text": "Education\n\nMSc Econometrics & Statistics — University of Toulouse, France (2002)\nBSc Mathematics — University of Nice Sophia-Antipolis, France (2001)"
+  },
+  {
+    "objectID": "about.html#publications",
+    "href": "about.html#publications",
+    "title": "",
+    "section": "Publications",
+    "text": "Publications\n\nComparison of two methods for Surgical Implantation of Radio-Telemetry Devices — Royal Society of Medicine Press\nAutomation of clinical trial: Graphical approach — Phuse Conference, Budapest"
+  },
+  {
+    "objectID": "about.html#contact",
+    "href": "about.html#contact",
+    "title": "",
+    "section": "Contact",
+    "text": "Contact\n\n💼 LinkedIn\n📧 remusatp@yahoo.fr\n🐙 GitHub"
   }
 ]
