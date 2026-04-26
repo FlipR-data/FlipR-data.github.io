@@ -54,3 +54,22 @@ code {
   transition: border-color 0.2s;
   &:hover { border-color: $primary; }
 }
+
+.about-hero {
+  text-align: center;
+  padding: 48px 32px 32px;
+  border-bottom: 0.5px solid #D3D1C7;
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin: 24px 0;
+}
+
+.skill-block {
+  border: 0.5px solid #D3D1C7;
+  border-radius: 12px;
+  padding: 20px 24px;
+}

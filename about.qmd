@@ -1,17 +1,91 @@
 ---
-title: "About"
+title: ""
+page-layout: full
 ---
 
-## Who am I ?
+::: about-hero
+# Philippe Remusat
 
-Statistical programmer in the pharmaceutical industry. I work with R daily — CDISC standards, ADaM datasets, TLFs.
+### Principal Statistical Programmer · Study Lead
 
-Outside of pharma, I apply R to sports analytics and finance.
+📍 Lausanne/Basel Area, Switzerland
+:::
 
-## Skills
+------------------------------------------------------------------------
 
--   R / tidyverse / ggplot2
+## Summary
+
+Senior Statistical Programmer with 20+ years of expertise in clinical development. Proven track record as a Global Study Lead in Oncology (Phases I–III), delivering successful submission packages for **FDA, EMA, and PMDA**.
+
+Currently bridging legacy SAS environments with modern Open Source — **R/Pharmaverse** and AI-driven automation — at Debiopharm.
+
+------------------------------------------------------------------------
+
+## Experience
+
+| Period      | Company                   | Role                                 |
+|------------------------|------------------------|------------------------|
+| 2025 – 2026 | **Debiopharm** · Lausanne | Senior Statistical Programmer (Lead) |
+| 2018 – 2024 | **Roche** · Basel         | Global Study Lead                    |
+| 2017        | **Cytel** · Geneva        | Senior Statistical Programmer (Lead) |
+| 2014 – 2017 | **IQVIA** · UK/Remote     | Lead Statistical Programmer          |
+| 2008 – 2014 | **Clinbay** · France      | Senior Statistical Programmer (Lead) |
+| 2006 – 2008 | **Novartis** · Basel      | Statistical Programmer               |
+| 2003 – 2005 | **Eli Lilly** · Belgium   | Statistical Analyst                  |
+
+------------------------------------------------------------------------
+
+## Core Skills
+
+:::::: skills-grid
+::: skill-block
+### Clinical & Regulatory
+
+-   CDISC (SDTM & ADaM)
+-   FDA · EMA · PMDA submissions
+-   Pinnacle 21 · Define.xml
+-   SDRG / ADRG
+-   MedDRA · WHODrug
+:::
+
+::: skill-block
+### Technical Stack
+
+-   R · tidyverse · admiral
+-   Pharmaverse · Teal
 -   R Shiny
--   CDISC / ADaM / TLFs
--   Git / GitHub
--   Quarto
+-   SAS (Advanced Macro)
+-   Git / GitLab · SQL
+:::
+
+::: skill-block
+### Therapeutic Areas
+
+-   Oncology (Phase I–III)
+-   Multiple Sclerosis
+-   Epilepsy · Ophthalmology
+-   Diabetes · PK studies
+:::
+::::::
+
+------------------------------------------------------------------------
+
+## Education
+
+-   **MSc Econometrics & Statistics** — University of Toulouse, France (2002)
+-   **BSc Mathematics** — University of Nice Sophia-Antipolis, France (2001)
+
+------------------------------------------------------------------------
+
+## Publications
+
+-   *Comparison of two methods for Surgical Implantation of Radio-Telemetry Devices* — Royal Society of Medicine Press
+-   *Automation of clinical trial: Graphical approach* — Phuse Conference, Budapest
+
+------------------------------------------------------------------------
+
+## Contact
+
+-   💼 [LinkedIn](https://www.linkedin.com/in/philippe-remusat-739b902/)
+-   📧 remusatp\@yahoo.fr
+-   🐙 [GitHub](https://github.com/FlipR-data)
