@@ -1,17 +1,41 @@
 ---
-title: "Clinical Data Programming"
-subtitle: "CDISC · ADaM · TLFs · R Pharmaverse"
-categories: [R, Pharma, CDISC, Shiny]
-date: 2026-04-25
+title: "Clinical AI Dashboard"
+subtitle: "CDISC Clinical Data Explorer with AI Assistant · R Pharmaverse"
+categories: [R, Pharma, Shiny, AI, CDISC]
+date: 2026-05-01
 ---
 
 ## Overview
 
-*Project coming soon — using CDISC pilot public dataset.*
+An interactive clinical data dashboard built with R and the **Pharmaverse** ecosystem, enhanced with an **AI assistant** powered by Groq.
 
-## Skills demonstrated
+The dashboard uses the public CDISC pilot dataset — the reference dataset used in regulatory submissions training worldwide.
 
--   ADaM dataset creation with `admiral`
--   TLF generation with `rtables` / `gt`
--   Safety reporting with `Teal` / `Shiny`
--   CDISC SDTM & ADaM standards
+## Features
+
+-   📊 **Clinical tables** — Demographics, Adverse Events summaries
+-   📈 **Kaplan-Meier survival curves** — interactive visualisation
+-   🤖 **AI chat assistant** — ask questions about the data in plain English
+-   🔬 Built with `tern`, `rtables`, `survminer`, `Pharmaverse`
+
+## Live Dashboard
+
+```{=html}
+<iframe src="https://flipr.shinyapps.io/iadashboard-1/"
+        width="100%" 
+        height="900px" 
+        style="border: 0.5px solid #D3D1C7; border-radius: 12px;">
+</iframe>
+```
+
+## Tech stack
+
+-   `shiny` — interactive web application
+-   `tern` / `rtables` — clinical tables (Pharmaverse)
+-   `survminer` / `survival` — Kaplan-Meier curves
+-   `Groq API` — AI assistant (Llama 3.3 70B)
+-   Data : CDISC pilot public dataset
+
+## Source code
+
+Full code available on [GitHub](https://github.com/FlipR-data/IAdashboard).
