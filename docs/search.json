@@ -191,16 +191,16 @@
   {
     "objectID": "projects/pharma/index.html",
     "href": "projects/pharma/index.html",
-    "title": "Clinical Data Programming",
+    "title": "Clinical AI Dashboard",
     "section": "",
-    "text": "Project coming soon — using CDISC pilot public dataset."
+    "text": "An interactive clinical data dashboard built with R and the Pharmaverse ecosystem, enhanced with an AI assistant powered by Groq.\nThe dashboard uses the public CDISC pilot dataset — the reference dataset used in regulatory submissions training worldwide."
   },
   {
     "objectID": "projects/pharma/index.html#overview",
     "href": "projects/pharma/index.html#overview",
-    "title": "Clinical Data Programming",
+    "title": "Clinical AI Dashboard",
     "section": "",
-    "text": "Project coming soon — using CDISC pilot public dataset."
+    "text": "An interactive clinical data dashboard built with R and the Pharmaverse ecosystem, enhanced with an AI assistant powered by Groq.\nThe dashboard uses the public CDISC pilot dataset — the reference dataset used in regulatory submissions training worldwide."
   },
   {
     "objectID": "projects/pharma/index.html#skills-demonstrated",
@@ -208,5 +208,33 @@
     "title": "Clinical Data Programming",
     "section": "Skills demonstrated",
     "text": "Skills demonstrated\n\nADaM dataset creation with admiral\nTLF generation with rtables / gt\nSafety reporting with Teal / Shiny\nCDISC SDTM & ADaM standards"
+  },
+  {
+    "objectID": "projects/pharma/index.html#features",
+    "href": "projects/pharma/index.html#features",
+    "title": "Clinical AI Dashboard",
+    "section": "Features",
+    "text": "Features\n\n📊 Clinical tables — Demographics, Adverse Events summaries\n📈 Kaplan-Meier survival curves — interactive visualisation\n🤖 AI chat assistant — ask questions about the data in plain English\n🔬 Built with tern, rtables, survminer, Pharmaverse"
+  },
+  {
+    "objectID": "projects/pharma/index.html#live-dashboard",
+    "href": "projects/pharma/index.html#live-dashboard",
+    "title": "Clinical AI Dashboard",
+    "section": "Live Dashboard",
+    "text": "Live Dashboard\n🔗 Open full screen"
+  },
+  {
+    "objectID": "projects/pharma/index.html#tech-stack",
+    "href": "projects/pharma/index.html#tech-stack",
+    "title": "Clinical AI Dashboard",
+    "section": "Tech stack",
+    "text": "Tech stack\n\nshiny — interactive web application\ntern / rtables — clinical tables (Pharmaverse)\nsurvminer / survival — Kaplan-Meier curves\nGroq API — AI assistant (Llama 3.3 70B)\nData : CDISC pilot public dataset"
+  },
+  {
+    "objectID": "projects/pharma/index.html#source-code",
+    "href": "projects/pharma/index.html#source-code",
+    "title": "Clinical AI Dashboard",
+    "section": "Source code",
+    "text": "Source code\nFull code available on GitHub."
   }
 ]

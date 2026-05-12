@@ -20,6 +20,8 @@ The dashboard uses the public CDISC pilot dataset — the reference dataset used
 
 ## Live Dashboard
 
+[🔗 Open full screen](https://flipr.shinyapps.io/iadashboard-1/){.btn .btn-primary target="_blank"}
+
 ```{=html}
 <iframe src="https://flipr.shinyapps.io/iadashboard-1/"
         width="100%" 

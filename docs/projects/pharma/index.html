@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-04-25">
+<meta name="dcterms.date" content="2026-05-01">
 
-<title>Clinical Data Programming – FlipR-data</title>
+<title>Clinical AI Dashboard – FlipR-data</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -156,7 +156,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
-  <li><a href="#skills-demonstrated" id="toc-skills-demonstrated" class="nav-link" data-scroll-target="#skills-demonstrated">Skills demonstrated</a></li>
+  <li><a href="#features" id="toc-features" class="nav-link" data-scroll-target="#features">Features</a></li>
+  <li><a href="#live-dashboard" id="toc-live-dashboard" class="nav-link" data-scroll-target="#live-dashboard">Live Dashboard</a></li>
+  <li><a href="#tech-stack" id="toc-tech-stack" class="nav-link" data-scroll-target="#tech-stack">Tech stack</a></li>
+  <li><a href="#source-code" id="toc-source-code" class="nav-link" data-scroll-target="#source-code">Source code</a></li>
   </ul>
 </nav>
     </div>
@@ -165,13 +168,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">Clinical Data Programming</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
-<p class="subtitle lead">CDISC · ADaM · TLFs · R Pharmaverse</p>
+<div class="quarto-title-block"><div><h1 class="title">Clinical AI Dashboard</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<p class="subtitle lead">CDISC Clinical Data Explorer with AI Assistant · R Pharmaverse</p>
   <div class="quarto-categories">
     <div class="quarto-category">R</div>
     <div class="quarto-category">Pharma</div>
-    <div class="quarto-category">CDISC</div>
     <div class="quarto-category">Shiny</div>
+    <div class="quarto-category">AI</div>
+    <div class="quarto-category">CDISC</div>
   </div>
   </div>
 
@@ -183,7 +187,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">April 25, 2026</p>
+      <p class="date">May 1, 2026</p>
     </div>
   </div>
   
@@ -197,16 +201,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="overview" class="level2">
 <h2 class="anchored" data-anchor-id="overview">Overview</h2>
-<p><em>Project coming soon — using CDISC pilot public dataset.</em></p>
+<p>An interactive clinical data dashboard built with R and the <strong>Pharmaverse</strong> ecosystem, enhanced with an <strong>AI assistant</strong> powered by Groq.</p>
+<p>The dashboard uses the public CDISC pilot dataset — the reference dataset used in regulatory submissions training worldwide.</p>
 </section>
-<section id="skills-demonstrated" class="level2">
-<h2 class="anchored" data-anchor-id="skills-demonstrated">Skills demonstrated</h2>
+<section id="features" class="level2">
+<h2 class="anchored" data-anchor-id="features">Features</h2>
 <ul>
-<li>ADaM dataset creation with <code>admiral</code></li>
-<li>TLF generation with <code>rtables</code> / <code>gt</code></li>
-<li>Safety reporting with <code>Teal</code> / <code>Shiny</code></li>
-<li>CDISC SDTM &amp; ADaM standards</li>
+<li>📊 <strong>Clinical tables</strong> — Demographics, Adverse Events summaries</li>
+<li>📈 <strong>Kaplan-Meier survival curves</strong> — interactive visualisation</li>
+<li>🤖 <strong>AI chat assistant</strong> — ask questions about the data in plain English</li>
+<li>🔬 Built with <code>tern</code>, <code>rtables</code>, <code>survminer</code>, <code>Pharmaverse</code></li>
 </ul>
+</section>
+<section id="live-dashboard" class="level2">
+<h2 class="anchored" data-anchor-id="live-dashboard">Live Dashboard</h2>
+<p><a href="https://flipr.shinyapps.io/iadashboard-1/" class="btn btn-primary" target="_blank">🔗 Open full screen</a></p>
+<iframe src="https://flipr.shinyapps.io/iadashboard-1/" width="100%" height="900px" style="border: 0.5px solid #D3D1C7; border-radius: 12px;">
+</iframe>
+</section>
+<section id="tech-stack" class="level2">
+<h2 class="anchored" data-anchor-id="tech-stack">Tech stack</h2>
+<ul>
+<li><code>shiny</code> — interactive web application</li>
+<li><code>tern</code> / <code>rtables</code> — clinical tables (Pharmaverse)</li>
+<li><code>survminer</code> / <code>survival</code> — Kaplan-Meier curves</li>
+<li><code>Groq API</code> — AI assistant (Llama 3.3 70B)</li>
+<li>Data : CDISC pilot public dataset</li>
+</ul>
+</section>
+<section id="source-code" class="level2">
+<h2 class="anchored" data-anchor-id="source-code">Source code</h2>
+<p>Full code available on <a href="https://github.com/FlipR-data/IAdashboard">GitHub</a>.</p>
 
 
 <!-- -->
@@ -665,22 +690,48 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   });
   </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Clinical Data Programming"</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "CDISC · ADaM · TLFs · R Pharmaverse"</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span><span class="co"> [R, Pharma, CDISC, Shiny]</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> 2026-04-25</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Clinical AI Dashboard"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "CDISC Clinical Data Explorer with AI Assistant · R Pharmaverse"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span><span class="co"> [R, Pharma, Shiny, AI, CDISC]</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> 2026-05-01</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">## Overview</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>*Project coming soon — using CDISC pilot public dataset.*</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>An interactive clinical data dashboard built with R and the **Pharmaverse** ecosystem, enhanced with an **AI assistant** powered by Groq.</span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">## Skills demonstrated</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>The dashboard uses the public CDISC pilot dataset — the reference dataset used in regulatory submissions training worldwide.</span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>ADaM dataset creation with <span class="in">`admiral`</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>TLF generation with <span class="in">`rtables`</span> / <span class="in">`gt`</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Safety reporting with <span class="in">`Teal`</span> / <span class="in">`Shiny`</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>CDISC SDTM &amp; ADaM standards</span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">## Features</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>📊 **Clinical tables** — Demographics, Adverse Events summaries</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>📈 **Kaplan-Meier survival curves** — interactive visualisation</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>🤖 **AI chat assistant** — ask questions about the data in plain English</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>🔬 Built with <span class="in">`tern`</span>, <span class="in">`rtables`</span>, <span class="in">`survminer`</span>, <span class="in">`Pharmaverse`</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="fu">## Live Dashboard</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">🔗 Open full screen</span><span class="co">](https://flipr.shinyapps.io/iadashboard-1/)</span>{.btn .btn-primary target="_blank"}</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="in">```{=html}</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;iframe src="https://flipr.shinyapps.io/iadashboard-1/"</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="in">        width="100%" </span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="in">        height="900px" </span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="in">        style="border: 0.5px solid #D3D1C7; border-radius: 12px;"&gt;</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;/iframe&gt;</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="fu">## Tech stack</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`shiny`</span> — interactive web application</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`tern`</span> / <span class="in">`rtables`</span> — clinical tables (Pharmaverse)</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`survminer`</span> / <span class="in">`survival`</span> — Kaplan-Meier curves</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`Groq API`</span> — AI assistant (Llama 3.3 70B)</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Data : CDISC pilot public dataset</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="fu">## Source code</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>Full code available on <span class="co">[</span><span class="ot">GitHub</span><span class="co">](https://github.com/FlipR-data/IAdashboard)</span>.</span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
